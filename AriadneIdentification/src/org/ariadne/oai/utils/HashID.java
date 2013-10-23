@@ -41,11 +41,11 @@ public class HashID extends Identification {
 	}
 
 	@Override
-	public Record addGlobalLOIdentifier(Record record,String reposIdentifier)
-			throws IllegalStateException, JDOMException {
+	public Record addGlobalLOIdentifier(Record record, String reposIdentifier,
+			String ctlg) throws IllegalStateException, JDOMException {
 		// TODO Auto-generated method stub
 
-		String ident = "ODS:" + reposIdentifier + ":";
+		String ident = ctlg + ":" + reposIdentifier + ":";
 
 		Element general = JDomUtils.getXpathNode("//lom:lom/lom:general",
 				OaiUtils.LOMLOMNS, record.getMetadata());
@@ -62,7 +62,7 @@ public class HashID extends Identification {
 			general.addContent(0, newIdentifier);
 
 			Element catalog = new Element("catalog", OaiUtils.LOMNS);
-			catalog.setText("ODS");
+			catalog.setText(ctlg);
 			newIdentifier.addContent(catalog);
 
 			Element entry = new Element("entry", OaiUtils.LOMNS);
@@ -107,10 +107,11 @@ public class HashID extends Identification {
 	}
 
 	@Override
-	public Record addGlobalMetadataIdentifier(Record record,String reposIdentifier)
-			throws IllegalStateException, JDOMException {
+	public Record addGlobalMetadataIdentifier(Record record,
+			String reposIdentifier, String ctlg) throws IllegalStateException,
+			JDOMException {
 		// TODO Auto-generated method stub
-		String ident = "ODS:" + reposIdentifier + ":";
+		String ident = ctlg + ":" + reposIdentifier + ":";
 
 		Element metametadata = JDomUtils.getXpathNode(
 				"//lom:lom/lom:metaMetadata", OaiUtils.LOMLOMNS,
@@ -128,7 +129,7 @@ public class HashID extends Identification {
 			metametadata.addContent(0, newIdentifier);
 
 			Element catalog = new Element("catalog", OaiUtils.LOMNS);
-			catalog.setText("ODS");
+			catalog.setText(ctlg);
 			newIdentifier.addContent(catalog);
 
 			Element entry = new Element("entry", OaiUtils.LOMNS);

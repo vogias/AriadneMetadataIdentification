@@ -45,9 +45,10 @@ public class HarvesterUtils extends Identification {
 	}
 
 	public Record addGlobalMetadataIdentifier(Record record,
-			String reposIdentifier) throws IllegalStateException, JDOMException {
+			String reposIdentifier, String ctlg) throws IllegalStateException,
+			JDOMException {
 
-		String ident = "ODS:" + reposIdentifier + ":";
+		String ident = ctlg + ":" + reposIdentifier + ":";
 
 		String loIdent = "";
 
@@ -75,7 +76,7 @@ public class HarvesterUtils extends Identification {
 						metametadata.addContent(0, newIdentifier);
 
 						Element catalog = new Element("catalog", OaiUtils.LOMNS);
-						catalog.setText("ODS");
+						catalog.setText(ctlg);
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);
@@ -98,10 +99,10 @@ public class HarvesterUtils extends Identification {
 
 	}
 
-	public Record addGlobalLOIdentifier(Record record, String reposIdentifier)
-			throws IllegalStateException, JDOMException {
+	public Record addGlobalLOIdentifier(Record record, String reposIdentifier,
+			String ctlg) throws IllegalStateException, JDOMException {
 
-		String ident = "ODS:" + reposIdentifier + ":";
+		String ident = ctlg + ":" + reposIdentifier + ":";
 
 		String loIdent = "";
 
@@ -127,7 +128,7 @@ public class HarvesterUtils extends Identification {
 						general.addContent(0, newIdentifier);
 
 						Element catalog = new Element("catalog", OaiUtils.LOMNS);
-						catalog.setText("ODS");
+						catalog.setText(ctlg);
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);

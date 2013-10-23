@@ -62,6 +62,7 @@ public class LomGlobalID {
 		System.out.println("========================================");
 		System.out.println("Number of records to Identify:" + xmls.size());
 		System.out.println("========================================");
+		String catalog = props.getProperty(Constants.catalog);
 
 		while (iterator.hasNext()) {
 			Object whatInstance = myClass.newInstance();
@@ -99,14 +100,16 @@ public class LomGlobalID {
 					.getDocument(), null);
 
 			if (enviroment.addGlobalLOIdentifier()) {
-				record = id.addGlobalLOIdentifier(record, parentFolder);
+				record = id
+						.addGlobalLOIdentifier(record, parentFolder, catalog);
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
 
 			}
 
 			if (enviroment.addGlobalMetadataIdentifier()) {
-				record = id.addGlobalMetadataIdentifier(record, parentFolder);
+				record = id.addGlobalMetadataIdentifier(record, parentFolder,
+						catalog);
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
 
