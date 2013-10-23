@@ -20,9 +20,13 @@ public class HashID extends Identification {
 
 	public XPath mmIdOaiCatalog;
 	public XPath gIdOaiCatalog;
+	String xmlString;
 
 	public HashID() {
+
 		try {
+
+			xmlString = "";
 			mmIdOaiCatalog = XPath
 					.newInstance("//lom:lom/lom:metaMetadata/lom:identifier/lom:catalog/text()=\"oai\"");
 			mmIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
@@ -32,67 +36,46 @@ public class HashID extends Identification {
 			gIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
 		} catch (JDOMException e) {
 			// NOOP
+			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public Record addGlobalLOIdentifier(Record record, String reposIdentifier)
+	public Record addGlobalLOIdentifier(Record record,String reposIdentifier)
 			throws IllegalStateException, JDOMException {
 		// TODO Auto-generated method stub
 
 		String ident = "ODS:" + reposIdentifier + ":";
 
-		String loIdent = "";
-
-		// try {
 		Element general = JDomUtils.getXpathNode("//lom:lom/lom:general",
 				OaiUtils.LOMLOMNS, record.getMetadata());
-		// /lom:lom/lom:general
+
 		if (general != null) {
-			Element generalIdentifier = general.getChild("identifier",
-					OaiUtils.LOMNS);
 
-			if (generalIdentifier != null) {
-				if (!(Boolean) gIdOaiCatalog.selectSingleNode(record
-						.getMetadata())) {
-					loIdent = generalIdentifier.getChildText("entry",
-							generalIdentifier.getNamespace());
+			if (xmlString.equals(""))
+				xmlString = JDomUtils.parseXml2string(record.getMetadata()
+						.getDocument(), null);
 
-					if (loIdent != null) {
-						ident = ident.concat(createMD5(loIdent));
+			ident = ident.concat(createMD5(xmlString));
 
-						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
-						general.addContent(0, newIdentifier);
+			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
+			general.addContent(0, newIdentifier);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
-						catalog.setText("ODS");
-						newIdentifier.addContent(catalog);
+			Element catalog = new Element("catalog", OaiUtils.LOMNS);
+			catalog.setText("ODS");
+			newIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
-						entry.setText(ident);
-						newIdentifier.addContent(entry);
-					} else {
-						System.err.println("Missing LOM Identifier");
-					}
+			Element entry = new Element("entry", OaiUtils.LOMNS);
+			entry.setText(ident);
+			newIdentifier.addContent(entry);
 
-				}
-			} else {
-				// throw new
-				// IllegalStateException("The LO has no general.identifier set");
-			}
-		} else {
-			// throw new
-			// IllegalStateException("The LO has no general.identifier set");
 		}
-		// } catch (JDOMException e) {
-		// harvestlogger.error("An error has occured while adding the global LO identifier : "
-		// + e.getMessage());
-		// }
+
 		return record;
 	}
 
 	private String createMD5(String input) {
+
 		MessageDigest md;
 
 		try {
@@ -111,8 +94,7 @@ public class HashID extends Identification {
 							.toString((byteData[i] & 0xff) + 0x100, 16)
 							.substring(1));
 				}
-				// System.out.println("Digest(in hex format):: " +
-				// sb.toString());
+
 				return sb.toString();
 			} else
 				return "noID";
@@ -125,55 +107,34 @@ public class HashID extends Identification {
 	}
 
 	@Override
-	public Record addGlobalMetadataIdentifier(Record record,
-			String reposIdentifier) throws IllegalStateException, JDOMException {
+	public Record addGlobalMetadataIdentifier(Record record,String reposIdentifier)
+			throws IllegalStateException, JDOMException {
 		// TODO Auto-generated method stub
 		String ident = "ODS:" + reposIdentifier + ":";
-
-		String loIdent = "";
-
-		// try {
 
 		Element metametadata = JDomUtils.getXpathNode(
 				"//lom:lom/lom:metaMetadata", OaiUtils.LOMLOMNS,
 				record.getMetadata());
 
 		if (metametadata != null) {
-			Element mmIdentifier = metametadata.getChild("identifier",
-					OaiUtils.LOMNS);
-			if (mmIdentifier != null) {
-				if (!(Boolean) mmIdOaiCatalog.selectSingleNode(record
-						.getMetadata())) {
 
-					loIdent = mmIdentifier.getChildText("entry",
-							mmIdentifier.getNamespace());
+			if (xmlString.equals(""))
+				xmlString = JDomUtils.parseXml2string(record.getMetadata()
+						.getDocument(), null);
 
-					if (loIdent != null) {
-						ident = ident.concat(createMD5(loIdent));
+			ident = ident.concat(createMD5(xmlString));
 
-						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
-						metametadata.addContent(0, newIdentifier);
+			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
+			metametadata.addContent(0, newIdentifier);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
-						catalog.setText("ODS");
-						newIdentifier.addContent(catalog);
+			Element catalog = new Element("catalog", OaiUtils.LOMNS);
+			catalog.setText("ODS");
+			newIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
-						entry.setText(ident);
-						newIdentifier.addContent(entry);
-					} else {
-						System.err.println("Missing LO Identifier");
-					}
+			Element entry = new Element("entry", OaiUtils.LOMNS);
+			entry.setText(ident);
+			newIdentifier.addContent(entry);
 
-				}
-			} else {
-				// throw new
-				// IllegalStateException("The LO has no metaMetadata.identifier set");
-			}
-		} else {
-			// throw new
-			// IllegalStateException("The LO has no metaMetadata.identifier set");
 		}
 		return record;
 

@@ -30,11 +30,13 @@ public class LomGlobalID {
 	 * @param args
 	 * @throws IOException
 	 * @throws JDOMException
-	 * @throws ClassNotFoundException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
-	public static void main(String[] args) throws JDOMException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public static void main(String[] args) throws JDOMException, IOException,
+			ClassNotFoundException, InstantiationException,
+			IllegalAccessException {
 		// TODO Auto-generated method stub
 		if (args.length != 2) {
 			System.err.println("Usage : ");
@@ -55,9 +57,6 @@ public class LomGlobalID {
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
 		Class myClass = myClassLoader.loadClass(idClass);
 
-		Object whatInstance = myClass.newInstance();
-		Identification id = (Identification) whatInstance;
-
 		// HarvesterUtils utils = new HarvesterUtils();
 
 		System.out.println("========================================");
@@ -65,6 +64,8 @@ public class LomGlobalID {
 		System.out.println("========================================");
 
 		while (iterator.hasNext()) {
+			Object whatInstance = myClass.newInstance();
+			Identification id = (Identification) whatInstance;
 
 			// System.out.println(iterator.next().getName());
 			File xmlFile = iterator.next();
