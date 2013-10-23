@@ -111,7 +111,8 @@ public class HashID extends Identification {
 							.toString((byteData[i] & 0xff) + 0x100, 16)
 							.substring(1));
 				}
-				System.out.println("Digest(in hex format):: " + sb.toString());
+				// System.out.println("Digest(in hex format):: " +
+				// sb.toString());
 				return sb.toString();
 			} else
 				return "noID";
