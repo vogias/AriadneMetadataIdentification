@@ -25,7 +25,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
 
-public class HarvesterUtils {
+public class HarvesterUtils extends Identification {
 
 	public XPath mmIdOaiCatalog;
 	public XPath gIdOaiCatalog;
@@ -63,22 +63,28 @@ public class HarvesterUtils {
 			if (mmIdentifier != null) {
 				if (!(Boolean) mmIdOaiCatalog.selectSingleNode(record
 						.getMetadata())) {
+
 					loIdent = mmIdentifier.getChildText("entry",
 							mmIdentifier.getNamespace());
 
-					ident = ident.concat(loIdent);
+					if (loIdent != null) {
+						ident = ident.concat(loIdent);
 
-					Element newIdentifier = new Element("identifier",
-							OaiUtils.LOMNS);
-					metametadata.addContent(0, newIdentifier);
+						Element newIdentifier = new Element("identifier",
+								OaiUtils.LOMNS);
+						metametadata.addContent(0, newIdentifier);
 
-					Element catalog = new Element("catalog", OaiUtils.LOMNS);
-					catalog.setText("ODS");
-					newIdentifier.addContent(catalog);
+						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						catalog.setText("ODS");
+						newIdentifier.addContent(catalog);
 
-					Element entry = new Element("entry", OaiUtils.LOMNS);
-					entry.setText(ident);
-					newIdentifier.addContent(entry);
+						Element entry = new Element("entry", OaiUtils.LOMNS);
+						entry.setText(ident);
+						newIdentifier.addContent(entry);
+					} else {
+						System.err.println("Missing LO Identifier");
+					}
+
 				}
 			} else {
 				// throw new
@@ -112,19 +118,25 @@ public class HarvesterUtils {
 						.getMetadata())) {
 					loIdent = generalIdentifier.getChildText("entry",
 							generalIdentifier.getNamespace());
-					ident = ident.concat(loIdent);
 
-					Element newIdentifier = new Element("identifier",
-							OaiUtils.LOMNS);
-					general.addContent(0, newIdentifier);
+					if (loIdent != null) {
+						ident = ident.concat(loIdent);
 
-					Element catalog = new Element("catalog", OaiUtils.LOMNS);
-					catalog.setText("ODS");
-					newIdentifier.addContent(catalog);
+						Element newIdentifier = new Element("identifier",
+								OaiUtils.LOMNS);
+						general.addContent(0, newIdentifier);
 
-					Element entry = new Element("entry", OaiUtils.LOMNS);
-					entry.setText(ident);
-					newIdentifier.addContent(entry);
+						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						catalog.setText("ODS");
+						newIdentifier.addContent(catalog);
+
+						Element entry = new Element("entry", OaiUtils.LOMNS);
+						entry.setText(ident);
+						newIdentifier.addContent(entry);
+					} else {
+						System.err.println("Missing LOM Identifier");
+					}
+
 				}
 			} else {
 				// throw new

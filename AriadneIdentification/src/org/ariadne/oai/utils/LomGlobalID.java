@@ -4,20 +4,20 @@
 package org.ariadne.oai.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
-import org.ariadne.util.IOUtilsv2;
 import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
-import org.ietf.jgss.Oid;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import constants.Constants;
 import enviroment.Enviroment;
 
 /**
@@ -30,8 +30,11 @@ public class LomGlobalID {
 	 * @param args
 	 * @throws IOException
 	 * @throws JDOMException
+	 * @throws ClassNotFoundException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 */
-	public static void main(String[] args) throws JDOMException, IOException {
+	public static void main(String[] args) throws JDOMException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		// TODO Auto-generated method stub
 		if (args.length != 2) {
 			System.err.println("Usage : ");
@@ -45,7 +48,17 @@ public class LomGlobalID {
 		Iterator<File> iterator = xmls.iterator();
 
 		SAXBuilder builder = new SAXBuilder();
-		HarvesterUtils utils = new HarvesterUtils();
+		Properties props = new Properties();
+		props.load(new FileInputStream("configure.properties"));
+
+		String idClass = props.getProperty(Constants.idCreatorClass);
+		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
+		Class myClass = myClassLoader.loadClass(idClass);
+
+		Object whatInstance = myClass.newInstance();
+		Identification id = (Identification) whatInstance;
+
+		// HarvesterUtils utils = new HarvesterUtils();
 
 		System.out.println("========================================");
 		System.out.println("Number of records to Identify:" + xmls.size());
@@ -85,15 +98,14 @@ public class LomGlobalID {
 					.getDocument(), null);
 
 			if (enviroment.addGlobalLOIdentifier()) {
-				record = utils.addGlobalLOIdentifier(record, parentFolder);
+				record = id.addGlobalLOIdentifier(record, parentFolder);
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
 
 			}
 
 			if (enviroment.addGlobalMetadataIdentifier()) {
-				record = utils
-						.addGlobalMetadataIdentifier(record, parentFolder);
+				record = id.addGlobalMetadataIdentifier(record, parentFolder);
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
 
