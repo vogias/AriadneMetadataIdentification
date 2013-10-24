@@ -109,6 +109,7 @@ public class HarvesterUtils extends Identification {
 		// try {
 		Element general = JDomUtils.getXpathNode("//lom:lom/lom:general",
 				OaiUtils.LOMLOMNS, record.getMetadata());
+
 		// /lom:lom/lom:general
 		if (general != null) {
 			Element generalIdentifier = general.getChild("identifier",
@@ -140,17 +141,38 @@ public class HarvesterUtils extends Identification {
 
 				}
 			} else {
-				// throw new
-				// IllegalStateException("The LO has no general.identifier set");
+				Element technical = JDomUtils.getXpathNode(
+						"//lom:lom/lom:technical", OaiUtils.LOMLOMNS,
+						record.getMetadata());
+
+				if (technical != null) {
+					Element location = technical.getChild("location",
+							OaiUtils.LOMNS);
+
+					if (location != null) {
+						loIdent = location.getText();
+
+						ident = ident.concat(loIdent);
+
+						Element newIdentifier = new Element("identifier",
+								OaiUtils.LOMNS);
+						general.addContent(0, newIdentifier);
+
+						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						catalog.setText(ctlg);
+						newIdentifier.addContent(catalog);
+
+						Element entry = new Element("entry", OaiUtils.LOMNS);
+						entry.setText(ident);
+						newIdentifier.addContent(entry);
+
+					}
+				}
 			}
 		} else {
-			// throw new
-			// IllegalStateException("The LO has no general.identifier set");
+
 		}
-		// } catch (JDOMException e) {
-		// harvestlogger.error("An error has occured while adding the global LO identifier : "
-		// + e.getMessage());
-		// }
+
 		return record;
 	}
 
