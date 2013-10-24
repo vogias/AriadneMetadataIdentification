@@ -45,29 +45,74 @@ public class HashID extends Identification {
 			String ctlg) throws IllegalStateException, JDOMException {
 		// TODO Auto-generated method stub
 
+		// String ident = ctlg + ":" + reposIdentifier + ":";
+		//
+		// Element general = JDomUtils.getXpathNode("//lom:lom/lom:general",
+		// OaiUtils.LOMLOMNS, record.getMetadata());
+		//
+		// if (general != null) {
+		//
+		// if (xmlString.equals(""))
+		// xmlString = JDomUtils.parseXml2string(record.getMetadata()
+		// .getDocument(), null);
+		//
+		// ident = ident.concat(createMD5(xmlString));
+		//
+		// Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
+		// general.addContent(0, newIdentifier);
+		//
+		// Element catalog = new Element("catalog", OaiUtils.LOMNS);
+		// catalog.setText(ctlg);
+		// newIdentifier.addContent(catalog);
+		//
+		// Element entry = new Element("entry", OaiUtils.LOMNS);
+		// entry.setText(ident);
+		// newIdentifier.addContent(entry);
+		//
+		// }
+		//
+		// return record;
 		String ident = ctlg + ":" + reposIdentifier + ":";
 
+		String loIdent = "";
+
+		// try {
 		Element general = JDomUtils.getXpathNode("//lom:lom/lom:general",
 				OaiUtils.LOMLOMNS, record.getMetadata());
-
+		// /lom:lom/lom:general
 		if (general != null) {
+			Element generalIdentifier = general.getChild("identifier",
+					OaiUtils.LOMNS);
 
-			if (xmlString.equals(""))
-				xmlString = JDomUtils.parseXml2string(record.getMetadata()
-						.getDocument(), null);
+			if (generalIdentifier != null) {
+				if (!(Boolean) gIdOaiCatalog.selectSingleNode(record
+						.getMetadata())) {
+					loIdent = generalIdentifier.getChildText("entry",
+							generalIdentifier.getNamespace());
 
-			ident = ident.concat(createMD5(xmlString));
+					if (loIdent != null) {
+						ident = ident.concat(loIdent);
 
-			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
-			general.addContent(0, newIdentifier);
+						Element newIdentifier = new Element("identifier",
+								OaiUtils.LOMNS);
+						general.addContent(0, newIdentifier);
 
-			Element catalog = new Element("catalog", OaiUtils.LOMNS);
-			catalog.setText(ctlg);
-			newIdentifier.addContent(catalog);
+						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						catalog.setText(ctlg);
+						newIdentifier.addContent(catalog);
 
-			Element entry = new Element("entry", OaiUtils.LOMNS);
-			entry.setText(ident);
-			newIdentifier.addContent(entry);
+						Element entry = new Element("entry", OaiUtils.LOMNS);
+						entry.setText(ident);
+						newIdentifier.addContent(entry);
+					} else {
+						System.err.println("Missing LOM Identifier");
+					}
+
+				}
+			} else {
+
+			}
+		} else {
 
 		}
 
@@ -93,6 +138,7 @@ public class HashID extends Identification {
 					sb.append(Integer
 							.toString((byteData[i] & 0xff) + 0x100, 16)
 							.substring(1));
+
 				}
 
 				return sb.toString();

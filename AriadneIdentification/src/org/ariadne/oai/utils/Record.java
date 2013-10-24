@@ -5,7 +5,6 @@ import org.jdom.Element;
 public class Record {
 
 	protected Element metadata;
-	protected String oaiIdentifier;
 
 	public Element getMetadata() {
 		return metadata;
