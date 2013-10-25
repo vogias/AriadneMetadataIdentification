@@ -24,11 +24,17 @@ import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import enviroment.Enviroment;
 
 public class HarvesterUtils extends Identification {
 
 	public XPath mmIdOaiCatalog;
 	public XPath gIdOaiCatalog;
+	private static final Logger slf4jLogger = LoggerFactory
+			.getLogger(HarvesterUtils.class);
 
 	public HarvesterUtils() {
 		try {
@@ -83,7 +89,9 @@ public class HarvesterUtils extends Identification {
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 					} else {
-						System.err.println("Missing LO Identifier");
+						
+						slf4jLogger.error("Missing LO Identifier");
+
 					}
 
 				}
@@ -136,7 +144,8 @@ public class HarvesterUtils extends Identification {
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 					} else {
-						System.err.println("Missing LOM Identifier");
+						
+						slf4jLogger.error("Missing LOM Identifier");
 					}
 
 				}

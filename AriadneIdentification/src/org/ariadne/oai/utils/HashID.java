@@ -11,6 +11,8 @@ import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author vogias
@@ -21,6 +23,8 @@ public class HashID extends Identification {
 	public XPath mmIdOaiCatalog;
 	public XPath gIdOaiCatalog;
 	String xmlString;
+	private static final Logger slf4jLogger = LoggerFactory
+			.getLogger(HarvesterUtils.class);
 
 	public HashID() {
 
@@ -79,7 +83,8 @@ public class HashID extends Identification {
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 					} else {
-						System.err.println("Missing LOM Identifier");
+
+						slf4jLogger.error("Missing LOM Identifier");
 					}
 
 				}
@@ -124,7 +129,7 @@ public class HashID extends Identification {
 		MessageDigest md;
 
 		try {
-			md = MessageDigest.getInstance("MD5");
+			md = MessageDigest.getInstance("SHA1");// MD5
 
 			if (!input.equals("")) {
 				input = input.trim();
@@ -146,7 +151,8 @@ public class HashID extends Identification {
 				return "noID";
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			slf4jLogger.error(e.getMessage());
 			return "noID";
 		}
 

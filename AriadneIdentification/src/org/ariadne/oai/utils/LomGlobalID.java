@@ -16,6 +16,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import constants.Constants;
 import enviroment.Enviroment;
@@ -25,6 +27,9 @@ import enviroment.Enviroment;
  * 
  */
 public class LomGlobalID {
+
+	private static final Logger slf4jLogger = LoggerFactory
+			.getLogger(LomGlobalID.class);
 
 	/**
 	 * @param args
@@ -39,9 +44,13 @@ public class LomGlobalID {
 			IllegalAccessException {
 		// TODO Auto-generated method stub
 		if (args.length != 2) {
-			System.err.println("Usage : ");
-			System.err
-					.println("java -jar LomGlobalID.jar <input folder path> <output folder path>");
+			// System.err.println("Usage : ");
+			// System.err
+			// .println("java -jar LomGlobalID.jar <input folder path> <output folder path>");
+			// System.exit(-1);
+
+			slf4jLogger
+					.error("Usage : java -jar LomGlobalID.jar <input folder path> <output folder path>");
 			System.exit(-1);
 		}
 
@@ -59,9 +68,12 @@ public class LomGlobalID {
 
 		// HarvesterUtils utils = new HarvesterUtils();
 
-		System.out.println("========================================");
-		System.out.println("Number of records to Identify:" + xmls.size());
-		System.out.println("========================================");
+		// System.out.println("========================================");
+		// System.out.println("Number of records to Identify:" + xmls.size());
+		// System.out.println("========================================");
+
+		slf4jLogger.info("Number of records to Identify:" + xmls.size());
+
 		String catalog = props.getProperty(Constants.catalog);
 
 		while (iterator.hasNext()) {
@@ -76,13 +88,19 @@ public class LomGlobalID {
 			if (!parentDest.exists()) {
 
 				if (enviroment.addGlobalLOIdentifier()) {
-					System.out
-							.println("Creating global LO identifiers for repository:"
+					// System.out
+					// .println("Creating global LO identifiers for repository:"
+					// + parentFolder);
+					slf4jLogger
+							.info("Creating global LO identifiers for repository:"
 									+ parentFolder);
 				}
 				if (enviroment.addGlobalMetadataIdentifier()) {
-					System.out
-							.println("Creating global LOM identifiers for repository:"
+					// System.out
+					// .println("Creating global LOM identifiers for repository:"
+					// + parentFolder);
+					slf4jLogger
+							.info("Creating global LOM identifiers for repository:"
 									+ parentFolder);
 				}
 
@@ -117,8 +135,11 @@ public class LomGlobalID {
 			OaiUtils.writeStringToFileInEncodingUTF8(xmlString, nFile.getPath());
 
 		}
-		System.out.println("========================================");
-		System.out.println("Done");
+
+		slf4jLogger.info("Done");
+
+		// System.out.println("========================================");
+		// System.out.println("Done");
 	}
 
 }

@@ -10,6 +10,9 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
+import org.ariadne.oai.utils.LomGlobalID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author vogias
@@ -22,6 +25,7 @@ public class Enviroment {
 	 */
 	Arguments arguments;
 	String input, output;
+	private static final Logger slf4jLogger = LoggerFactory.getLogger(Enviroment.class);
 
 	public Enviroment(String input, String output) {
 		try {
@@ -74,7 +78,8 @@ public class Enviroment {
 		else if (addGLOID.equals("false"))
 			return false;
 		else {
-			System.err.println("Wrong input");
+			
+			slf4jLogger.error("Wrong argument on Global LO Identifier declaration.");
 			return false;
 		}
 	}
@@ -87,7 +92,7 @@ public class Enviroment {
 		else if (addGLOID.equals("false"))
 			return false;
 		else {
-			System.err.println("Wrong input");
+			slf4jLogger.error("Wrong argument on Global LOM Identifier declaration.");
 			return false;
 		}
 	}
@@ -99,7 +104,8 @@ public class Enviroment {
 		if (input.exists() && input.isDirectory())
 			return true;
 		else {
-			System.err.println("Wrong input folder location.");
+			
+			slf4jLogger.error("Wrong input folder location.");
 			return false;
 		}
 
@@ -112,7 +118,8 @@ public class Enviroment {
 		if (output.exists() && output.isDirectory())
 			return true;
 		else {
-			System.err.println("Wrong output folder location.");
+			
+			slf4jLogger.error("Wrong output folder location.");
 			return false;
 		}
 
