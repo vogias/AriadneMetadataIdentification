@@ -4,7 +4,7 @@
 	<!-- <consolePlugin /> -->
 
 	<property file="configure.properties" />
-	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" />
+	<!-- <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" /> -->
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
@@ -16,7 +16,7 @@
 	</appender>
 
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
-		<file>${log.file.path}\\testFile-${bySecond}.log</file>
+		<file>${log.file.path}\\${log.file.name}.log</file>
 		<append>true</append>
 		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
 			by default -->
