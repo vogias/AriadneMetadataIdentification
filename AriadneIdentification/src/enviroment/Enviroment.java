@@ -28,18 +28,12 @@ public class Enviroment {
 	private static final Logger slf4jLogger = LoggerFactory
 			.getLogger(Enviroment.class);
 
-	public Enviroment(String input, String output) {
-		try {
-			arguments = new Arguments();
-			this.input = input;
-			this.output = output;
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public Enviroment(String input, String output) throws FileNotFoundException {
+
+		arguments = new Arguments();
+		this.input = input;
+		this.output = output;
+
 	}
 
 	/**

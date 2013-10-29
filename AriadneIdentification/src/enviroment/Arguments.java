@@ -8,6 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import constants.Constants;
 
 /**
@@ -17,10 +20,20 @@ import constants.Constants;
 public class Arguments {
 
 	Properties props;
+	private static final Logger slf4jLogger = LoggerFactory
+			.getLogger(Arguments.class);
 
-	public Arguments() throws FileNotFoundException, IOException {
+	public Arguments() {
 		props = new Properties();
-		props.load(new FileInputStream("configure.properties"));
+		try {
+			props.load(new FileInputStream("configure.properties"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			slf4jLogger.error(e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			slf4jLogger.error(e.getMessage());
+		}
 	}
 
 	/**
