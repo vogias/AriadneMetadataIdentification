@@ -19,6 +19,8 @@
 
 package org.ariadne.oai.utils;
 
+import java.util.Properties;
+
 import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
@@ -51,8 +53,8 @@ public class HarvesterUtils extends Identification {
 	}
 
 	public Record addGlobalMetadataIdentifier(Record record,
-			String reposIdentifier, String ctlg) throws IllegalStateException,
-			JDOMException {
+			String reposIdentifier, String ctlg)
+			throws IllegalStateException, JDOMException {
 
 		String ident = ctlg + ":" + reposIdentifier + ":";
 
@@ -89,7 +91,7 @@ public class HarvesterUtils extends Identification {
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 					} else {
-						
+
 						slf4jLogger.error("Missing LO Identifier");
 
 					}
@@ -108,7 +110,8 @@ public class HarvesterUtils extends Identification {
 	}
 
 	public Record addGlobalLOIdentifier(Record record, String reposIdentifier,
-			String ctlg) throws IllegalStateException, JDOMException {
+			String ctlg) throws IllegalStateException,
+			JDOMException {
 
 		String ident = ctlg + ":" + reposIdentifier + ":";
 
@@ -144,7 +147,7 @@ public class HarvesterUtils extends Identification {
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 					} else {
-						
+
 						slf4jLogger.error("Missing LOM Identifier");
 					}
 

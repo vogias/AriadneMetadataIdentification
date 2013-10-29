@@ -25,7 +25,8 @@ public class Enviroment {
 	 */
 	Arguments arguments;
 	String input, output;
-	private static final Logger slf4jLogger = LoggerFactory.getLogger(Enviroment.class);
+	private static final Logger slf4jLogger = LoggerFactory
+			.getLogger(Enviroment.class);
 
 	public Enviroment(String input, String output) {
 		try {
@@ -39,6 +40,21 @@ public class Enviroment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @return the arguments
+	 */
+	public Arguments getArguments() {
+		return arguments;
+	}
+
+	/**
+	 * @param arguments
+	 *            the arguments to set
+	 */
+	public void setArguments(Arguments arguments) {
+		this.arguments = arguments;
 	}
 
 	/**
@@ -78,8 +94,9 @@ public class Enviroment {
 		else if (addGLOID.equals("false"))
 			return false;
 		else {
-			
-			slf4jLogger.error("Wrong argument on Global LO Identifier declaration.");
+
+			slf4jLogger
+					.error("Wrong argument on Global LO Identifier declaration.");
 			return false;
 		}
 	}
@@ -92,7 +109,8 @@ public class Enviroment {
 		else if (addGLOID.equals("false"))
 			return false;
 		else {
-			slf4jLogger.error("Wrong argument on Global LOM Identifier declaration.");
+			slf4jLogger
+					.error("Wrong argument on Global LOM Identifier declaration.");
 			return false;
 		}
 	}
@@ -104,7 +122,7 @@ public class Enviroment {
 		if (input.exists() && input.isDirectory())
 			return true;
 		else {
-			
+
 			slf4jLogger.error("Wrong input folder location.");
 			return false;
 		}
@@ -118,7 +136,7 @@ public class Enviroment {
 		if (output.exists() && output.isDirectory())
 			return true;
 		else {
-			
+
 			slf4jLogger.error("Wrong output folder location.");
 			return false;
 		}

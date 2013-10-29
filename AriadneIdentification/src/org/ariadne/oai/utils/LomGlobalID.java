@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -59,8 +60,8 @@ public class LomGlobalID {
 		Iterator<File> iterator = xmls.iterator();
 
 		SAXBuilder builder = new SAXBuilder();
-		Properties props = new Properties();
-		props.load(new FileInputStream("configure.properties"));
+
+		Properties props = enviroment.getArguments().getProps();
 
 		String idClass = props.getProperty(Constants.idCreatorClass);
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
@@ -72,9 +73,8 @@ public class LomGlobalID {
 		// System.out.println("Number of records to Identify:" + xmls.size());
 		// System.out.println("========================================");
 
-		slf4jLogger.info("Number of records to Identify:" + xmls.size());
-
 		String catalog = props.getProperty(Constants.catalog);
+		slf4jLogger.info("Number of records to Identify:" + xmls.size());
 
 		while (iterator.hasNext()) {
 			Object whatInstance = myClass.newInstance();
@@ -105,6 +105,7 @@ public class LomGlobalID {
 				}
 
 				parentDest.mkdir();
+
 			}
 
 			File nFile = new File(parentDest, xmlFile.getName());
@@ -141,5 +142,4 @@ public class LomGlobalID {
 		// System.out.println("========================================");
 		// System.out.println("Done");
 	}
-
 }

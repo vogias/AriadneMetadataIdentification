@@ -3,8 +3,12 @@
  */
 package org.ariadne.oai.utils;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 
 import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
@@ -13,6 +17,8 @@ import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import constants.Constants;
 
 /**
  * @author vogias
@@ -27,6 +33,7 @@ public class HashID extends Identification {
 			.getLogger(HarvesterUtils.class);
 
 	public HashID() {
+		super();
 
 		try {
 
@@ -129,7 +136,10 @@ public class HashID extends Identification {
 		MessageDigest md;
 
 		try {
-			md = MessageDigest.getInstance("SHA1");// MD5
+			Properties props = new Properties();
+			props.load(new FileInputStream("configure.properties"));
+			String method = props.getProperty(Constants.hMethod);
+			md = MessageDigest.getInstance(method);// MD5
 
 			if (!input.equals("")) {
 				input = input.trim();
@@ -152,6 +162,14 @@ public class HashID extends Identification {
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 
+			slf4jLogger.error(e.getMessage());
+			return "noID";
+		} catch (FileNotFoundException e) {
+			// TODO: handle exception
+			slf4jLogger.error(e.getMessage());
+			return "noID";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			slf4jLogger.error(e.getMessage());
 			return "noID";
 		}

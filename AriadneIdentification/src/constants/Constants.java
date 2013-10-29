@@ -18,17 +18,11 @@ package constants;
  * 
  */
 public class Constants {
-	// public static String input = "identification.xml.input";
-	// public static String output = "identification.xml.output";
+
 	public static String addGlobalLOIdentifier = "identification.xml.addGlobalLOIdentifier";
 	public static String addGlobalMetadataIdentifier = "identification.xml.addGlobalMetadataIdentifier";
 	public static String idCreatorClass = "identification.class";
 	public static String catalog = "identification.catalog.value";
-	// public static String metadataID = "identification.xml.xpath.metadataID";
-	// public static String loID = "identification.xml.xpath.loID";
-	// public static String metadataIDparent =
-	// "identification.xml.xpath.metadataID.parent2appendMID";
-	// public static String loIDparent =
-	// "identification.xml.xpath.loID.parent2appendLOID";
+	public static String hMethod = "identification.hash.method";
 
 }
