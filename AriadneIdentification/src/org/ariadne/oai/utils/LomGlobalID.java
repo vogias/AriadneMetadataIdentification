@@ -90,7 +90,7 @@ public class LomGlobalID {
 
 				Date date = new Date();
 				slf4jLogger.info("Identifing repository:" + parentFolder);
-				slf4jLogger.info("Identification Date:" + date.toString());
+				slf4jLogger.info("Identification date:" + date.toString());
 
 				if (enviroment.addGlobalLOIdentifier()) {
 					// System.out
