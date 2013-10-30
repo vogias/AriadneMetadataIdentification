@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -74,7 +75,7 @@ public class LomGlobalID {
 		// System.out.println("========================================");
 
 		String catalog = props.getProperty(Constants.catalog);
-		slf4jLogger.info("Number of records to Identify:" + xmls.size());
+		slf4jLogger.info("Number of records:" + xmls.size());
 
 		while (iterator.hasNext()) {
 			Object whatInstance = myClass.newInstance();
@@ -87,21 +88,22 @@ public class LomGlobalID {
 
 			if (!parentDest.exists()) {
 
+				Date date = new Date();
+				slf4jLogger.info("Identifing repository:" + parentFolder);
+				slf4jLogger.info("Identification Date:" + date.toString());
+
 				if (enviroment.addGlobalLOIdentifier()) {
 					// System.out
 					// .println("Creating global LO identifiers for repository:"
 					// + parentFolder);
-					slf4jLogger
-							.info("Creating global LO identifiers for repository:"
-									+ parentFolder);
+
+					slf4jLogger.info("Creating global LO identifiers");
 				}
 				if (enviroment.addGlobalMetadataIdentifier()) {
 					// System.out
 					// .println("Creating global LOM identifiers for repository:"
 					// + parentFolder);
-					slf4jLogger
-							.info("Creating global LOM identifiers for repository:"
-									+ parentFolder);
+					slf4jLogger.info("Creating global LOM identifiers");
 				}
 
 				parentDest.mkdir();

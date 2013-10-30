@@ -25,6 +25,7 @@ public class Enviroment {
 	 */
 	Arguments arguments;
 	String input, output;
+	
 	private static final Logger slf4jLogger = LoggerFactory
 			.getLogger(Enviroment.class);
 
@@ -110,10 +111,10 @@ public class Enviroment {
 	}
 
 	private boolean checkInput() {
-		String inputFolder = getInput();
-		File input = new File(inputFolder);
+		String in = getInput();
+		File inputFolder = new File(in);
 
-		if (input.exists() && input.isDirectory())
+		if (inputFolder.exists() && inputFolder.isDirectory())
 			return true;
 		else {
 
