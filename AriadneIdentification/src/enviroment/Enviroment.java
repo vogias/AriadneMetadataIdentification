@@ -25,9 +25,6 @@ public class Enviroment {
 	 */
 	Arguments arguments;
 	String input, output;
-	
-	private static final Logger slf4jLogger = LoggerFactory
-			.getLogger(Enviroment.class);
 
 	public Enviroment(String input, String output) throws FileNotFoundException {
 
@@ -90,8 +87,8 @@ public class Enviroment {
 			return false;
 		else {
 
-			slf4jLogger
-					.error("Wrong argument on Global LO Identifier declaration.");
+			System.err
+					.println("Wrong argument on Global LO Identifier declaration.");
 			return false;
 		}
 	}
@@ -104,8 +101,8 @@ public class Enviroment {
 		else if (addGLOID.equals("false"))
 			return false;
 		else {
-			slf4jLogger
-					.error("Wrong argument on Global LOM Identifier declaration.");
+			System.err
+					.println("Wrong argument on Global LOM Identifier declaration.");
 			return false;
 		}
 	}
@@ -118,7 +115,7 @@ public class Enviroment {
 			return true;
 		else {
 
-			slf4jLogger.error("Wrong input folder location.");
+			System.err.println("Wrong input folder location.");
 			return false;
 		}
 
@@ -132,7 +129,7 @@ public class Enviroment {
 			return true;
 		else {
 
-			slf4jLogger.error("Wrong output folder location.");
+			System.err.println("Wrong output folder location.");
 			return false;
 		}
 

@@ -20,8 +20,6 @@ import constants.Constants;
 public class Arguments {
 
 	Properties props;
-	private static final Logger slf4jLogger = LoggerFactory
-			.getLogger(Arguments.class);
 
 	public Arguments() {
 		props = new Properties();
@@ -29,10 +27,10 @@ public class Arguments {
 			props.load(new FileInputStream("configure.properties"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			slf4jLogger.error(e.getMessage());
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			slf4jLogger.error(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

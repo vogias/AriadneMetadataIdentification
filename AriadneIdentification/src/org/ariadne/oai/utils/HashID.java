@@ -29,8 +29,6 @@ public class HashID extends Identification {
 	public XPath mmIdOaiCatalog;
 	public XPath gIdOaiCatalog;
 	String xmlString;
-	private static final Logger slf4jLogger = LoggerFactory
-			.getLogger(HarvesterUtils.class);
 
 	public HashID() {
 		super();
@@ -91,7 +89,7 @@ public class HashID extends Identification {
 						newIdentifier.addContent(entry);
 					} else {
 
-						slf4jLogger.error("Missing LOM Identifier");
+						System.err.println("Missing LOM Identifier");
 					}
 
 				}
@@ -162,15 +160,15 @@ public class HashID extends Identification {
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 
-			slf4jLogger.error(e.getMessage());
+			e.printStackTrace();
 			return "noID";
 		} catch (FileNotFoundException e) {
 			// TODO: handle exception
-			slf4jLogger.error(e.getMessage());
+			e.printStackTrace();
 			return "noID";
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			slf4jLogger.error(e.getMessage());
+			e.printStackTrace();
 			return "noID";
 		}
 

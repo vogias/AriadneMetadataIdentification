@@ -4,11 +4,9 @@
 package org.ariadne.oai.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -51,11 +49,12 @@ public class LomGlobalID {
 			// .println("java -jar LomGlobalID.jar <input folder path> <output folder path>");
 			// System.exit(-1);
 
-			slf4jLogger
-					.error("Usage : java -jar LomGlobalID.jar <input folder path> <output folder path>");
+			System.err
+					.println("Usage : java -jar LomGlobalID.jar <input folder path> <output folder path>");
 			System.exit(-1);
 		}
 
+		StringBuffer logstring = new StringBuffer();
 		Enviroment enviroment = new Enviroment(args[0], args[1]);
 		Collection<File> xmls = enviroment.getXMLs();
 		Iterator<File> iterator = xmls.iterator();
@@ -75,7 +74,8 @@ public class LomGlobalID {
 		// System.out.println("========================================");
 
 		String catalog = props.getProperty(Constants.catalog);
-		slf4jLogger.info("Number of records:" + xmls.size());
+		System.out.println("Number of records:" + xmls.size());
+		logstring.append(xmls.size());
 
 		while (iterator.hasNext()) {
 			Object whatInstance = myClass.newInstance();
@@ -89,22 +89,29 @@ public class LomGlobalID {
 			if (!parentDest.exists()) {
 
 				Date date = new Date();
-				slf4jLogger.info("Identifing repository:" + parentFolder);
-				slf4jLogger.info("Identification date:" + date.toString());
+				System.out.println("Identifing repository:" + parentFolder);
+				logstring.append(" " + parentFolder);
+
+				System.out.println("Identification date:" + date.toString());
 
 				if (enviroment.addGlobalLOIdentifier()) {
 					// System.out
 					// .println("Creating global LO identifiers for repository:"
 					// + parentFolder);
 
-					slf4jLogger.info("Creating global LO identifiers");
-				}
+					System.out.println("Creating global LO identifiers");
+					logstring.append(" " + "TRUE");
+				} else
+					logstring.append(" " + "FALSE");
+
 				if (enviroment.addGlobalMetadataIdentifier()) {
 					// System.out
 					// .println("Creating global LOM identifiers for repository:"
 					// + parentFolder);
-					slf4jLogger.info("Creating global LOM identifiers");
-				}
+					System.out.println("Creating global LOM identifiers");
+					logstring.append(" " + "TRUE");
+				} else
+					logstring.append(" " + "FALSE");
 
 				parentDest.mkdir();
 
@@ -139,7 +146,7 @@ public class LomGlobalID {
 
 		}
 
-		slf4jLogger.info("Done");
+		slf4jLogger.info(logstring.toString());
 
 		// System.out.println("========================================");
 		// System.out.println("Done");

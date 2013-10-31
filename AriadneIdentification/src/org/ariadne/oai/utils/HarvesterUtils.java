@@ -19,8 +19,6 @@
 
 package org.ariadne.oai.utils;
 
-import java.util.Properties;
-
 import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
@@ -29,14 +27,10 @@ import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import enviroment.Enviroment;
-
 public class HarvesterUtils extends Identification {
 
 	public XPath mmIdOaiCatalog;
 	public XPath gIdOaiCatalog;
-	private static final Logger slf4jLogger = LoggerFactory
-			.getLogger(HarvesterUtils.class);
 
 	public HarvesterUtils() {
 		try {
@@ -53,8 +47,8 @@ public class HarvesterUtils extends Identification {
 	}
 
 	public Record addGlobalMetadataIdentifier(Record record,
-			String reposIdentifier, String ctlg)
-			throws IllegalStateException, JDOMException {
+			String reposIdentifier, String ctlg) throws IllegalStateException,
+			JDOMException {
 
 		String ident = ctlg + ":" + reposIdentifier + ":";
 
@@ -92,7 +86,7 @@ public class HarvesterUtils extends Identification {
 						newIdentifier.addContent(entry);
 					} else {
 
-						slf4jLogger.error("Missing LO Identifier");
+						System.err.println("Missing LO Identifier");
 
 					}
 
@@ -110,8 +104,7 @@ public class HarvesterUtils extends Identification {
 	}
 
 	public Record addGlobalLOIdentifier(Record record, String reposIdentifier,
-			String ctlg) throws IllegalStateException,
-			JDOMException {
+			String ctlg) throws IllegalStateException, JDOMException {
 
 		String ident = ctlg + ":" + reposIdentifier + ":";
 
@@ -148,7 +141,7 @@ public class HarvesterUtils extends Identification {
 						newIdentifier.addContent(entry);
 					} else {
 
-						slf4jLogger.error("Missing LOM Identifier");
+						System.err.println("Missing LOM Identifier");
 					}
 
 				}
