@@ -117,8 +117,6 @@ public class LomGlobalID {
 
 			}
 
-			
-
 			Document document = (Document) builder.build(xmlFile);
 			Element rootNode = document.getRootElement();
 			Record record = new Record();
@@ -135,18 +133,18 @@ public class LomGlobalID {
 
 			}
 
+			File nFile;
 			if (enviroment.addGlobalMetadataIdentifier()) {
 				record = id.addGlobalMetadataIdentifier(record, parentFolder,
 						catalog);
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
+				nFile = new File(parentDest, id.getGlobalLOMIdentifier()
+						+ ".xml");
 
-			}
-			
-			
-			
-			//File nFile = new File(parentDest, xmlFile.getName());
-			File nFile = new File(parentDest, id.getGlobalLOMIdentifier()+".xml");
+			} else
+				nFile = new File(parentDest, xmlFile.getName());
+
 			OaiUtils.writeStringToFileInEncodingUTF8(xmlString, nFile.getPath());
 
 		}
