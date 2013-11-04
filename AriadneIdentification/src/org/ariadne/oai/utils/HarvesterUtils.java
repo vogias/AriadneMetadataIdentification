@@ -30,6 +30,8 @@ public class HarvesterUtils extends Identification {
 	public XPath mmIdOaiCatalog;
 	public XPath gIdOaiCatalog;
 
+	String gLOID, gLOMID;
+
 	public HarvesterUtils() {
 		try {
 			mmIdOaiCatalog = XPath
@@ -39,6 +41,8 @@ public class HarvesterUtils extends Identification {
 			gIdOaiCatalog = XPath
 					.newInstance("//lom:lom/lom:general/lom:identifier/lom:catalog/text()=\"oai\"");
 			gIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
+			gLOID = "";
+			gLOMID = "";
 		} catch (JDOMException e) {
 			// NOOP
 		}
@@ -82,6 +86,7 @@ public class HarvesterUtils extends Identification {
 						Element entry = new Element("entry", OaiUtils.LOMNS);
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
+						gLOMID = ident;
 					} else {
 
 						System.err.println("Missing LO Identifier");
@@ -137,6 +142,7 @@ public class HarvesterUtils extends Identification {
 						Element entry = new Element("entry", OaiUtils.LOMNS);
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
+						gLOID = ident;
 					} else {
 
 						System.err.println("Missing LOM Identifier");
@@ -168,6 +174,7 @@ public class HarvesterUtils extends Identification {
 						Element entry = new Element("entry", OaiUtils.LOMNS);
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
+						gLOID = loIdent;
 
 					}
 				}
@@ -177,6 +184,18 @@ public class HarvesterUtils extends Identification {
 		}
 
 		return record;
+	}
+
+	@Override
+	public String getGlobalLOIdentifier() {
+		// TODO Auto-generated method stub
+		return gLOID;
+	}
+
+	@Override
+	public String getGlobalLOMIdentifier() {
+		// TODO Auto-generated method stub
+		return gLOMID;
 	}
 
 }

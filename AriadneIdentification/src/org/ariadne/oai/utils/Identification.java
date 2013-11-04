@@ -19,4 +19,8 @@ public abstract class Identification {
 			String reposIdentifier, String catalog)
 			throws IllegalStateException, JDOMException;
 
+	public abstract String getGlobalLOIdentifier();
+
+	public abstract String getGlobalLOMIdentifier();
+
 }

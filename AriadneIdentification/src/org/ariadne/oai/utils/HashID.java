@@ -28,12 +28,16 @@ public class HashID extends Identification {
 	public XPath gIdOaiCatalog;
 	String xmlString;
 
+	String gLOID, gLOMID;
+
 	public HashID() {
-		super();
 
 		try {
 
 			xmlString = "";
+			gLOID = "";
+			gLOMID = "";
+
 			mmIdOaiCatalog = XPath
 					.newInstance("//lom:lom/lom:metaMetadata/lom:identifier/lom:catalog/text()=\"oai\"");
 			mmIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
@@ -85,6 +89,8 @@ public class HashID extends Identification {
 						Element entry = new Element("entry", OaiUtils.LOMNS);
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
+
+						gLOID = ident;
 					} else {
 
 						System.err.println("Missing LOM Identifier");
@@ -116,6 +122,8 @@ public class HashID extends Identification {
 						Element entry = new Element("entry", OaiUtils.LOMNS);
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
+
+						gLOID = ident;
 
 					}
 				}
@@ -191,6 +199,8 @@ public class HashID extends Identification {
 
 			ident = ident.concat(createMD5(xmlString));
 
+			gLOMID = ident;
+
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
 			metametadata.addContent(0, newIdentifier);
 
@@ -205,5 +215,17 @@ public class HashID extends Identification {
 		}
 		return record;
 
+	}
+
+	@Override
+	public String getGlobalLOIdentifier() {
+		// TODO Auto-generated method stub
+		return gLOID;
+	}
+
+	@Override
+	public String getGlobalLOMIdentifier() {
+		// TODO Auto-generated method stub
+		return gLOMID;
 	}
 }

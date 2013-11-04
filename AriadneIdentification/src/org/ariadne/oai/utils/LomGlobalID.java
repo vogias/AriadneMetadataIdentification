@@ -117,7 +117,7 @@ public class LomGlobalID {
 
 			}
 
-			File nFile = new File(parentDest, xmlFile.getName());
+			
 
 			Document document = (Document) builder.build(xmlFile);
 			Element rootNode = document.getRootElement();
@@ -142,6 +142,11 @@ public class LomGlobalID {
 						.getDocument(), null);
 
 			}
+			
+			
+			
+			//File nFile = new File(parentDest, xmlFile.getName());
+			File nFile = new File(parentDest, id.getGlobalLOMIdentifier()+".xml");
 			OaiUtils.writeStringToFileInEncodingUTF8(xmlString, nFile.getPath());
 
 		}
