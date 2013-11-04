@@ -52,7 +52,7 @@ public class HarvesterUtils extends Identification {
 			String reposIdentifier, String ctlg) throws IllegalStateException,
 			JDOMException {
 
-		String ident = ctlg + ":" + reposIdentifier + ":";
+		String ident = ctlg + "_" + reposIdentifier + "_";
 
 		String loIdent = "";
 
@@ -109,7 +109,7 @@ public class HarvesterUtils extends Identification {
 	public Record addGlobalLOIdentifier(Record record, String reposIdentifier,
 			String ctlg) throws IllegalStateException, JDOMException {
 
-		String ident = ctlg + ":" + reposIdentifier + ":";
+		String ident = ctlg + "_" + reposIdentifier + "_";
 
 		String loIdent = "";
 

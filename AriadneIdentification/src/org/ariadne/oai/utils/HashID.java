@@ -56,7 +56,7 @@ public class HashID extends Identification {
 			String ctlg) throws IllegalStateException, JDOMException {
 		// TODO Auto-generated method stub
 
-		String ident = ctlg + ":" + reposIdentifier + ":";
+		String ident = ctlg + "_" + reposIdentifier + "_";
 
 		String loIdent = "";
 
@@ -185,7 +185,7 @@ public class HashID extends Identification {
 			String reposIdentifier, String ctlg) throws IllegalStateException,
 			JDOMException {
 		// TODO Auto-generated method stub
-		String ident = ctlg + ":" + reposIdentifier + ":";
+		String ident = ctlg + "_" + reposIdentifier + "_";
 
 		Element metametadata = JDomUtils.getXpathNode(
 				"//lom:lom/lom:metaMetadata", OaiUtils.LOMLOMNS,
