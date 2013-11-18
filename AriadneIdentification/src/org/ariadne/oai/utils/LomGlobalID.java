@@ -139,12 +139,16 @@ public class LomGlobalID {
 						catalog);
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
-				nFile = new File(parentDest, id.getGlobalLOMIdentifier()
+				String globalLOMIdentifier = id.getGlobalLOMIdentifier();
+				globalLOMIdentifier=globalLOMIdentifier.replace("/", ".");
+				globalLOMIdentifier=globalLOMIdentifier.replace(":", ".");
+				nFile = new File(parentDest, globalLOMIdentifier
 						+ ".xml");
 
 			} else
 				nFile = new File(parentDest, xmlFile.getName());
 
+			
 			OaiUtils.writeStringToFileInEncodingUTF8(xmlString, nFile.getPath());
 
 		}
