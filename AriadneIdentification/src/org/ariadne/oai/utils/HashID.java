@@ -182,8 +182,8 @@ public class HashID extends Identification {
 
 	@Override
 	public Record addGlobalMetadataIdentifier(Record record,
-			String reposIdentifier, String ctlg) throws IllegalStateException,
-			JDOMException {
+			String reposIdentifier, String ctlg, String oaiID)
+			throws IllegalStateException, JDOMException {
 		// TODO Auto-generated method stub
 		String ident = ctlg + "_" + reposIdentifier + "_";
 
@@ -224,7 +224,7 @@ public class HashID extends Identification {
 			Element lom = JDomUtils.getXpathNode("//lom:lom",
 					OaiUtils.LOMLOMNS, record.getMetadata());
 			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
-			lom.addContent(2,metametadata);
+			lom.addContent(2, metametadata);
 
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
 			metametadata.addContent(0, newIdentifier);

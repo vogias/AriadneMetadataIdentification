@@ -150,6 +150,7 @@ public class Enviroment {
 
 		if (checkEnviroment())
 			files = FileUtils.listFiles(new File(getInput()), extensions, true);
+
 		else
 			System.exit(-1);
 		return files;

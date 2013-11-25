@@ -59,54 +59,9 @@ public class HarvesterUtils extends Identification {
 		}
 	}
 
-	private String createHash(String input) {
-
-		MessageDigest md;
-
-		try {
-			Properties props = new Properties();
-			props.load(new FileInputStream("configure.properties"));
-			String method = props.getProperty(Constants.hMethod);
-			md = MessageDigest.getInstance(method);// MD5
-
-			if (!input.equals("")) {
-				input = input.trim();
-				md.update(input.getBytes());
-
-				byte byteData[] = md.digest();
-
-				// convert the byte to hex format method 1
-				StringBuffer sb = new StringBuffer();
-				for (int i = 0; i < byteData.length; i++) {
-					sb.append(Integer
-							.toString((byteData[i] & 0xff) + 0x100, 16)
-							.substring(1));
-
-				}
-
-				return sb.toString();
-			} else
-				return "noID";
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-
-			e.printStackTrace();
-			return "noID";
-		} catch (FileNotFoundException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			return "noID";
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "noID";
-		}
-
-	}
-
 	public Record addGlobalMetadataIdentifier(Record record,
-			String reposIdentifier, String ctlg) throws IllegalStateException,
-			JDOMException {
+			String reposIdentifier, String ctlg, String oaiID)
+			throws IllegalStateException, JDOMException {
 
 		String ident = ctlg + "_" + reposIdentifier + "_";
 
@@ -154,11 +109,7 @@ public class HarvesterUtils extends Identification {
 				mmIdentifier = new Element("identifier", OaiUtils.LOMNS);
 				metametadata.addContent(0, mmIdentifier);
 
-				if (xmlString.equals(""))
-					xmlString = JDomUtils.parseXml2string(record.getMetadata()
-							.getDocument(), null);
-
-				ident = ident.concat(createHash(xmlString));
+				ident += "_" + oaiID;
 
 				gLOMID = ident;
 
@@ -173,11 +124,7 @@ public class HarvesterUtils extends Identification {
 			}
 		} else {
 
-			if (xmlString.equals(""))
-				xmlString = JDomUtils.parseXml2string(record.getMetadata()
-						.getDocument(), null);
-
-			ident = ident.concat(createHash(xmlString));
+			ident += "_" + oaiID;
 
 			gLOMID = ident;
 

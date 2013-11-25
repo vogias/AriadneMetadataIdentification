@@ -12,7 +12,7 @@ import org.jdom.JDOMException;
 public abstract class Identification {
 
 	public abstract Record addGlobalMetadataIdentifier(Record record,
-			String reposIdentifier, String catalog)
+			String reposIdentifier, String catalog,String oaiID)
 			throws IllegalStateException, JDOMException;
 
 	public abstract Record addGlobalLOIdentifier(Record record,
