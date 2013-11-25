@@ -135,7 +135,7 @@ public class HashID extends Identification {
 		return record;
 	}
 
-	private String createMD5(String input) {
+	private String createHash(String input) {
 
 		MessageDigest md;
 
@@ -197,7 +197,7 @@ public class HashID extends Identification {
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
 
-			ident = ident.concat(createMD5(xmlString));
+			ident = ident.concat(createHash(xmlString));
 
 			gLOMID = ident;
 
@@ -212,6 +212,30 @@ public class HashID extends Identification {
 			entry.setText(ident);
 			newIdentifier.addContent(entry);
 
+		} else {
+			if (xmlString.equals(""))
+				xmlString = JDomUtils.parseXml2string(record.getMetadata()
+						.getDocument(), null);
+
+			ident = ident.concat(createHash(xmlString));
+
+			gLOMID = ident;
+
+			Element lom = JDomUtils.getXpathNode("//lom:lom",
+					OaiUtils.LOMLOMNS, record.getMetadata());
+			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
+			lom.addContent(2,metametadata);
+
+			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
+			metametadata.addContent(0, newIdentifier);
+
+			Element catalog = new Element("catalog", OaiUtils.LOMNS);
+			catalog.setText(ctlg);
+			newIdentifier.addContent(catalog);
+
+			Element entry = new Element("entry", OaiUtils.LOMNS);
+			entry.setText(ident);
+			newIdentifier.addContent(entry);
 		}
 		return record;
 

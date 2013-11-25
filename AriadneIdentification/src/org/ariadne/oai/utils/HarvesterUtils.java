@@ -19,11 +19,20 @@
 
 package org.ariadne.oai.utils;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
+
 import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
+
+import constants.Constants;
 
 public class HarvesterUtils extends Identification {
 
@@ -31,9 +40,11 @@ public class HarvesterUtils extends Identification {
 	public XPath gIdOaiCatalog;
 
 	String gLOID, gLOMID;
+	String xmlString;
 
 	public HarvesterUtils() {
 		try {
+			xmlString = "";
 			mmIdOaiCatalog = XPath
 					.newInstance("//lom:lom/lom:metaMetadata/lom:identifier/lom:catalog/text()=\"oai\"");
 			mmIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
@@ -46,6 +57,51 @@ public class HarvesterUtils extends Identification {
 		} catch (JDOMException e) {
 			// NOOP
 		}
+	}
+
+	private String createHash(String input) {
+
+		MessageDigest md;
+
+		try {
+			Properties props = new Properties();
+			props.load(new FileInputStream("configure.properties"));
+			String method = props.getProperty(Constants.hMethod);
+			md = MessageDigest.getInstance(method);// MD5
+
+			if (!input.equals("")) {
+				input = input.trim();
+				md.update(input.getBytes());
+
+				byte byteData[] = md.digest();
+
+				// convert the byte to hex format method 1
+				StringBuffer sb = new StringBuffer();
+				for (int i = 0; i < byteData.length; i++) {
+					sb.append(Integer
+							.toString((byteData[i] & 0xff) + 0x100, 16)
+							.substring(1));
+
+				}
+
+				return sb.toString();
+			} else
+				return "noID";
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+			return "noID";
+		} catch (FileNotFoundException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return "noID";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "noID";
+		}
+
 	}
 
 	public Record addGlobalMetadataIdentifier(Record record,
@@ -95,12 +151,51 @@ public class HarvesterUtils extends Identification {
 
 				}
 			} else {
-				// throw new
-				// IllegalStateException("The LO has no metaMetadata.identifier set");
+				mmIdentifier = new Element("identifier", OaiUtils.LOMNS);
+				metametadata.addContent(0, mmIdentifier);
+
+				if (xmlString.equals(""))
+					xmlString = JDomUtils.parseXml2string(record.getMetadata()
+							.getDocument(), null);
+
+				ident = ident.concat(createHash(xmlString));
+
+				gLOMID = ident;
+
+				Element catalog = new Element("catalog", OaiUtils.LOMNS);
+				catalog.setText(ctlg);
+				mmIdentifier.addContent(catalog);
+
+				Element entry = new Element("entry", OaiUtils.LOMNS);
+				entry.setText(ident);
+				mmIdentifier.addContent(entry);
+
 			}
 		} else {
-			// throw new
-			// IllegalStateException("The LO has no metaMetadata.identifier set");
+
+			if (xmlString.equals(""))
+				xmlString = JDomUtils.parseXml2string(record.getMetadata()
+						.getDocument(), null);
+
+			ident = ident.concat(createHash(xmlString));
+
+			gLOMID = ident;
+
+			Element lom = JDomUtils.getXpathNode("//lom:lom",
+					OaiUtils.LOMLOMNS, record.getMetadata());
+			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
+			lom.addContent(2, metametadata);
+
+			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
+			metametadata.addContent(0, newIdentifier);
+
+			Element catalog = new Element("catalog", OaiUtils.LOMNS);
+			catalog.setText(ctlg);
+			newIdentifier.addContent(catalog);
+
+			Element entry = new Element("entry", OaiUtils.LOMNS);
+			entry.setText(ident);
+			newIdentifier.addContent(entry);
 		}
 		return record;
 
