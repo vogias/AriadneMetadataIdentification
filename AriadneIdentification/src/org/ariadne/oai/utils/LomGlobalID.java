@@ -77,6 +77,8 @@ public class LomGlobalID {
 		System.out.println("Number of records:" + xmls.size());
 		logstring.append(xmls.size());
 
+		boolean flag = false;
+
 		while (iterator.hasNext()) {
 			Object whatInstance = myClass.newInstance();
 			Identification id = (Identification) whatInstance;
@@ -86,7 +88,10 @@ public class LomGlobalID {
 			String parentFolder = xmlFile.getParentFile().getName();
 			File parentDest = new File(enviroment.getOutput(), parentFolder);
 
-			if (!parentDest.exists()) {
+			if (!parentDest.exists())
+				parentDest.mkdir();
+
+			if (flag == false) {
 
 				Date date = new Date();
 				System.out.println("Identifing repository:" + parentFolder);
@@ -113,7 +118,7 @@ public class LomGlobalID {
 				} else
 					logstring.append(" " + "FALSE");
 
-				parentDest.mkdir();
+				flag = true;
 
 			}
 
@@ -144,8 +149,8 @@ public class LomGlobalID {
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
 				String globalLOMIdentifier = id.getGlobalLOMIdentifier();
-				//globalLOMIdentifier = globalLOMIdentifier.replace("/", ".");
-				//globalLOMIdentifier = globalLOMIdentifier.replace(":", ".");
+				// globalLOMIdentifier = globalLOMIdentifier.replace("/", ".");
+				// globalLOMIdentifier = globalLOMIdentifier.replace(":", ".");
 				nFile = new File(parentDest, globalLOMIdentifier + ".xml");
 
 			} else
