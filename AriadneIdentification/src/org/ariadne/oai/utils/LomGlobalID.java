@@ -144,8 +144,8 @@ public class LomGlobalID {
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
 				String globalLOMIdentifier = id.getGlobalLOMIdentifier();
-				globalLOMIdentifier = globalLOMIdentifier.replace("/", ".");
-				globalLOMIdentifier = globalLOMIdentifier.replace(":", ".");
+				//globalLOMIdentifier = globalLOMIdentifier.replace("/", ".");
+				//globalLOMIdentifier = globalLOMIdentifier.replace(":", ".");
 				nFile = new File(parentDest, globalLOMIdentifier + ".xml");
 
 			} else

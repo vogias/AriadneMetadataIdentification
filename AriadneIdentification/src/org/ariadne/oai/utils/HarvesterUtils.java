@@ -95,6 +95,8 @@ public class HarvesterUtils extends Identification {
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);
+						ident = ident.replace("/", ".");
+						ident = ident.replace(":", ".");
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 						gLOMID = ident;
@@ -111,22 +113,21 @@ public class HarvesterUtils extends Identification {
 
 				ident += "_" + oaiID;
 
-				gLOMID = ident;
-
 				Element catalog = new Element("catalog", OaiUtils.LOMNS);
 				catalog.setText(ctlg);
 				mmIdentifier.addContent(catalog);
 
 				Element entry = new Element("entry", OaiUtils.LOMNS);
+				ident = ident.replace("/", ".");
+				ident = ident.replace(":", ".");
 				entry.setText(ident);
 				mmIdentifier.addContent(entry);
+				gLOMID = ident;
 
 			}
 		} else {
 
 			ident += "_" + oaiID;
-
-			gLOMID = ident;
 
 			Element lom = JDomUtils.getXpathNode("//lom:lom",
 					OaiUtils.LOMLOMNS, record.getMetadata());
@@ -141,8 +142,11 @@ public class HarvesterUtils extends Identification {
 			newIdentifier.addContent(catalog);
 
 			Element entry = new Element("entry", OaiUtils.LOMNS);
+			ident = ident.replace("/", ".");
+			ident = ident.replace(":", ".");
 			entry.setText(ident);
 			newIdentifier.addContent(entry);
+			gLOMID = ident;
 		}
 		return record;
 
@@ -182,6 +186,8 @@ public class HarvesterUtils extends Identification {
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);
+						ident = ident.replace("/", ".");
+						ident = ident.replace(":", ".");
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 						gLOID = ident;
@@ -214,6 +220,8 @@ public class HarvesterUtils extends Identification {
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);
+						ident = ident.replace("/", ".");
+						ident = ident.replace(":", ".");
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 						gLOID = loIdent;

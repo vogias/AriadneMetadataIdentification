@@ -29,6 +29,7 @@ public class HashID extends Identification {
 	String xmlString;
 
 	String gLOID, gLOMID;
+	private String ident;
 
 	public HashID() {
 
@@ -87,6 +88,8 @@ public class HashID extends Identification {
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);
+						ident = ident.replace("/", ".");
+						ident = ident.replace(":", ".");
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 
@@ -120,6 +123,8 @@ public class HashID extends Identification {
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);
+						ident = ident.replace("/", ".");
+						ident = ident.replace(":", ".");
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 
@@ -199,8 +204,6 @@ public class HashID extends Identification {
 
 			ident = ident.concat(createHash(xmlString));
 
-			gLOMID = ident;
-
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
 			metametadata.addContent(0, newIdentifier);
 
@@ -209,8 +212,11 @@ public class HashID extends Identification {
 			newIdentifier.addContent(catalog);
 
 			Element entry = new Element("entry", OaiUtils.LOMNS);
+			ident = ident.replace("/", ".");
+			ident = ident.replace(":", ".");
 			entry.setText(ident);
 			newIdentifier.addContent(entry);
+			gLOMID = ident;
 
 		} else {
 			if (xmlString.equals(""))
@@ -218,8 +224,6 @@ public class HashID extends Identification {
 						.getDocument(), null);
 
 			ident = ident.concat(createHash(xmlString));
-
-			gLOMID = ident;
 
 			Element lom = JDomUtils.getXpathNode("//lom:lom",
 					OaiUtils.LOMLOMNS, record.getMetadata());
@@ -234,8 +238,11 @@ public class HashID extends Identification {
 			newIdentifier.addContent(catalog);
 
 			Element entry = new Element("entry", OaiUtils.LOMNS);
+			ident = ident.replace("/", ".");
+			ident = ident.replace(":", ".");
 			entry.setText(ident);
 			newIdentifier.addContent(entry);
+			gLOMID = ident;
 		}
 		return record;
 
