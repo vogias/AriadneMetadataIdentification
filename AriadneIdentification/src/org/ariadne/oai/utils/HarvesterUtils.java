@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Properties;
 
 import org.ariadne.util.JDomUtils;
@@ -74,39 +75,44 @@ public class HarvesterUtils extends Identification {
 				record.getMetadata());
 
 		if (metametadata != null) {
-			Element mmIdentifier = metametadata.getChild("identifier",
-					OaiUtils.LOMNS);
+			// Element mmIdentifier = metametadata.getChild("identifier",
+			// OaiUtils.LOMNS);
+			List children = metametadata.getChildren("identifier",
+					OaiUtils.LOMLOMNS);
+
+			Element mmIdentifier = (Element) children.get(0);
+
 			if (mmIdentifier != null) {
-				if (!(Boolean) mmIdOaiCatalog.selectSingleNode(record
-						.getMetadata())) {
+				// if (!(Boolean) mmIdOaiCatalog.selectSingleNode(record
+				// .getMetadata())) {
 
-					loIdent = mmIdentifier.getChildText("entry",
-							mmIdentifier.getNamespace());
+				loIdent = mmIdentifier.getChildText("entry",
+						mmIdentifier.getNamespace());
 
-					if (loIdent != null) {
-						ident = ident.concat(loIdent);
+				if (loIdent != null) {
+					ident = ident.concat(loIdent);
 
-						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
-						metametadata.addContent(0, newIdentifier);
+					Element newIdentifier = new Element("identifier",
+							OaiUtils.LOMNS);
+					metametadata.addContent(0, newIdentifier);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
-						catalog.setText(ctlg);
-						newIdentifier.addContent(catalog);
+					Element catalog = new Element("catalog", OaiUtils.LOMNS);
+					catalog.setText(ctlg);
+					newIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
-						ident = ident.replace("/", ".");
-						ident = ident.replace(":", ".");
-						entry.setText(ident);
-						newIdentifier.addContent(entry);
-						gLOMID = ident;
-					} else {
+					Element entry = new Element("entry", OaiUtils.LOMNS);
+					ident = ident.replace("/", ".");
+					ident = ident.replace(":", ".");
+					entry.setText(ident);
+					newIdentifier.addContent(entry);
+					gLOMID = ident;
+				} else {
 
-						System.err.println("Missing LO Identifier");
-
-					}
+					System.err.println("Missing LO Identifier");
 
 				}
+
+				// }
 			} else {
 				mmIdentifier = new Element("identifier", OaiUtils.LOMNS);
 				metametadata.addContent(0, mmIdentifier);
