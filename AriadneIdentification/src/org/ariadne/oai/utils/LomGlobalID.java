@@ -75,10 +75,10 @@ public class LomGlobalID {
 
 		String catalog = props.getProperty(Constants.catalog);
 		System.out.println("Number of records:" + xmls.size());
-		logstring.append(xmls.size());
 
 		boolean flag = false;
 
+		int cnt = 0;
 		while (iterator.hasNext()) {
 			Object whatInstance = myClass.newInstance();
 			Identification id = (Identification) whatInstance;
@@ -158,11 +158,14 @@ public class LomGlobalID {
 			} else
 				nFile = new File(parentDest, xmlFile.getName());
 
-			if (!id.getGlobalLOIdentifier().equals(""))
+			if (!id.getGlobalLOIdentifier().equals("")) {
 				OaiUtils.writeStringToFileInEncodingUTF8(xmlString,
 						nFile.getPath());
+				cnt++;
+			}
 
 		}
+		logstring.append(" " + cnt);
 
 		slf4jLogger.info(logstring.toString());
 
