@@ -19,21 +19,13 @@
 
 package org.ariadne.oai.utils;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Properties;
 
 import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
-
-import constants.Constants;
 
 public class HarvesterUtils extends Identification {
 
@@ -101,8 +93,8 @@ public class HarvesterUtils extends Identification {
 					newIdentifier.addContent(catalog);
 
 					Element entry = new Element("entry", OaiUtils.LOMNS);
-					ident = ident.replace("/", ".");
-					ident = ident.replace(":", ".");
+					// ident = ident.replace("/", ".");
+					// ident = ident.replace(":", ".");
 					entry.setText(ident);
 					newIdentifier.addContent(entry);
 					gLOMID = ident;
@@ -124,8 +116,8 @@ public class HarvesterUtils extends Identification {
 				mmIdentifier.addContent(catalog);
 
 				Element entry = new Element("entry", OaiUtils.LOMNS);
-				ident = ident.replace("/", ".");
-				ident = ident.replace(":", ".");
+				// ident = ident.replace("/", ".");
+				// ident = ident.replace(":", ".");
 				entry.setText(ident);
 				mmIdentifier.addContent(entry);
 				gLOMID = ident;
@@ -148,8 +140,8 @@ public class HarvesterUtils extends Identification {
 			newIdentifier.addContent(catalog);
 
 			Element entry = new Element("entry", OaiUtils.LOMNS);
-			ident = ident.replace("/", ".");
-			ident = ident.replace(":", ".");
+			// ident = ident.replace("/", ".");
+			// ident = ident.replace(":", ".");
 			entry.setText(ident);
 			newIdentifier.addContent(entry);
 			gLOMID = ident;
@@ -192,8 +184,8 @@ public class HarvesterUtils extends Identification {
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);
-						ident = ident.replace("/", ".");
-						ident = ident.replace(":", ".");
+						// ident = ident.replace("/", ".");
+						// ident = ident.replace(":", ".");
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 						gLOID = ident;
@@ -226,8 +218,8 @@ public class HarvesterUtils extends Identification {
 						newIdentifier.addContent(catalog);
 
 						Element entry = new Element("entry", OaiUtils.LOMNS);
-						ident = ident.replace("/", ".");
-						ident = ident.replace(":", ".");
+						// ident = ident.replace("/", ".");
+						// ident = ident.replace(":", ".");
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 						gLOID = loIdent;
