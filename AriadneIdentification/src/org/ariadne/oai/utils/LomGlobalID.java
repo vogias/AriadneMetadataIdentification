@@ -134,6 +134,7 @@ public class LomGlobalID {
 			if (enviroment.addGlobalLOIdentifier()) {
 				record = id
 						.addGlobalLOIdentifier(record, parentFolder, catalog);
+
 				xmlString = JDomUtils.parseXml2string(record.getMetadata()
 						.getDocument(), null);
 
@@ -157,8 +158,9 @@ public class LomGlobalID {
 			} else
 				nFile = new File(parentDest, xmlFile.getName());
 
-			OaiUtils.writeStringToFileInEncodingUTF8(xmlString, nFile.getPath());
-			
+			if (!id.getGlobalLOIdentifier().equals(""))
+				OaiUtils.writeStringToFileInEncodingUTF8(xmlString,
+						nFile.getPath());
 
 		}
 
