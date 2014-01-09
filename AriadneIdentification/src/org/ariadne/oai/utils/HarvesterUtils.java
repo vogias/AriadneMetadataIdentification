@@ -177,34 +177,36 @@ public class HarvesterUtils extends Identification {
 					OaiUtils.LOMNS);
 
 			if (generalIdentifier != null) {
-				if (!(Boolean) gIdOaiCatalog.selectSingleNode(record
-						.getMetadata())) {
-					loIdent = generalIdentifier.getChildText("entry",
-							generalIdentifier.getNamespace());
 
-					if (loIdent != null) {
-						ident = ident.concat(loIdent);
+				// if (!(Boolean) gIdOaiCatalog.selectSingleNode(record
+				// .getMetadata())) {
+				loIdent = generalIdentifier.getChildText("entry",
+						generalIdentifier.getNamespace());
 
-						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
-						general.addContent(0, newIdentifier);
+				if (loIdent != null) {
+					System.out.println("Preexisting LOID:" + loIdent);
+					ident = ident.concat(loIdent);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
-						catalog.setText(ctlg);
-						newIdentifier.addContent(catalog);
+					Element newIdentifier = new Element("identifier",
+							OaiUtils.LOMNS);
+					general.addContent(0, newIdentifier);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
-						// ident = ident.replace("/", ".");
-						// ident = ident.replace(":", ".");
-						entry.setText(ident);
-						newIdentifier.addContent(entry);
-						gLOID = ident;
-					} else {
+					Element catalog = new Element("catalog", OaiUtils.LOMNS);
+					catalog.setText(ctlg);
+					newIdentifier.addContent(catalog);
 
-						System.err.println("Missing LOM Identifier");
-					}
+					Element entry = new Element("entry", OaiUtils.LOMNS);
+					// ident = ident.replace("/", ".");
+					// ident = ident.replace(":", ".");
+					entry.setText(ident);
+					newIdentifier.addContent(entry);
+					gLOID = ident;
+				} else {
 
+					System.err.println("Missing LOM Identifier");
 				}
+
+				// }
 			} else {
 				Element technical = JDomUtils.getXpathNode(
 						"//lom:lom/lom:technical", OaiUtils.LOMLOMNS,

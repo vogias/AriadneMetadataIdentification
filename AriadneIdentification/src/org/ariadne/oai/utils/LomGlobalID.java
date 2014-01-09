@@ -157,13 +157,15 @@ public class LomGlobalID {
 
 			} else
 				nFile = new File(parentDest, xmlFile.getName());
+			System.out.println("LO Identifier:" + id.getGlobalLOIdentifier());
 
 			if (!id.getGlobalLOIdentifier().equals("")) {
 				OaiUtils.writeStringToFileInEncodingUTF8(xmlString,
 						nFile.getPath());
 				cnt++;
-			}else
-				System.out.println(nFile.getPath()+" does not contain LO ID");
+			} else
+				System.out.println(xmlFile.getPath()
+						+ " does not contain LO ID");
 
 		}
 		logstring.append(" " + cnt);
