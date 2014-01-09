@@ -184,7 +184,7 @@ public class HarvesterUtils extends Identification {
 						generalIdentifier.getNamespace());
 
 				if (loIdent != null) {
-					System.out.println("Preexisting LOID:" + loIdent);
+					
 					ident = ident.concat(loIdent);
 
 					Element newIdentifier = new Element("identifier",

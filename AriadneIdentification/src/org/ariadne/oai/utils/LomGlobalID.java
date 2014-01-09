@@ -157,7 +157,7 @@ public class LomGlobalID {
 
 			} else
 				nFile = new File(parentDest, xmlFile.getName());
-			System.out.println("LO Identifier:" + id.getGlobalLOIdentifier());
+			
 
 			if (!id.getGlobalLOIdentifier().equals("")) {
 				OaiUtils.writeStringToFileInEncodingUTF8(xmlString,
