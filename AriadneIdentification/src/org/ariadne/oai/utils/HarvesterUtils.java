@@ -129,8 +129,16 @@ public class HarvesterUtils extends Identification {
 
 			Element lom = JDomUtils.getXpathNode("//lom:lom",
 					OaiUtils.LOMLOMNS, record.getMetadata());
+
+			Element lifecycle = JDomUtils.getXpathNode(
+					"//lom:lom/lom:lifeCycle", OaiUtils.LOMLOMNS,
+					record.getMetadata());
+
 			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
-			lom.addContent(2, metametadata);
+			if (lifecycle != null)
+				lom.addContent(3, metametadata);
+			else
+				lom.addContent(2, metametadata);
 
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
 			metametadata.addContent(0, newIdentifier);
