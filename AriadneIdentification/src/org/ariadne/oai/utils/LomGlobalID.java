@@ -162,7 +162,8 @@ public class LomGlobalID {
 				OaiUtils.writeStringToFileInEncodingUTF8(xmlString,
 						nFile.getPath());
 				cnt++;
-			}
+			}else
+				System.out.println(nFile.getPath()+" does not contain LO ID");
 
 		}
 		logstring.append(" " + cnt);
