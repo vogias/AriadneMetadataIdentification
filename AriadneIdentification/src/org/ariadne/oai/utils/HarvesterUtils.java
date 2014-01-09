@@ -135,10 +135,14 @@ public class HarvesterUtils extends Identification {
 					record.getMetadata());
 
 			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
-			if (lifecycle != null)
-				lom.addContent(3, metametadata);
-			else
+
+			if (lifecycle != null) {
+				lom.addContent(4, metametadata);
+				System.err.println("lifecycle exists");
+			} else {
 				lom.addContent(2, metametadata);
+				System.err.println("lifecycle does not exist");
+			}
 
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
 			metametadata.addContent(0, newIdentifier);
