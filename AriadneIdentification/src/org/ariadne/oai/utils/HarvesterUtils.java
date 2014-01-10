@@ -136,11 +136,17 @@ public class HarvesterUtils extends Identification {
 
 			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
 
-			if (lifecycle != null)
-				lom.addContent(4, metametadata);
+			if (lifecycle != null) {
+				try {
+					lom.addContent(4, metametadata);
+				} catch (IndexOutOfBoundsException ex) {
+					lom.addContent(2, metametadata);
+				}
 
-			else
+			} else {
 				lom.addContent(2, metametadata);
+
+			}
 
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
 			metametadata.addContent(0, newIdentifier);
@@ -184,7 +190,7 @@ public class HarvesterUtils extends Identification {
 						generalIdentifier.getNamespace());
 
 				if (loIdent != null) {
-					
+
 					ident = ident.concat(loIdent);
 
 					Element newIdentifier = new Element("identifier",
