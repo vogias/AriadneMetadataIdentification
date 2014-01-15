@@ -67,12 +67,12 @@ public class HarvesterUtils extends Identification {
 				record.getMetadata());
 
 		if (metametadata != null) {
-			// Element mmIdentifier = metametadata.getChild("identifier",
-			// OaiUtils.LOMNS);
-			List children = metametadata.getChildren("identifier",
-					OaiUtils.LOMLOMNS);
+			Element mmIdentifier = metametadata.getChild("identifier",
+					OaiUtils.LOMNS);
+			// List children = metametadata.getChildren("identifier",
+			// OaiUtils.LOMLOMNS);
 
-			Element mmIdentifier = (Element) children.get(0);
+			// Element mmIdentifier = (Element) children.get(0);
 
 			if (mmIdentifier != null) {
 				// if (!(Boolean) mmIdOaiCatalog.selectSingleNode(record
@@ -136,8 +136,12 @@ public class HarvesterUtils extends Identification {
 
 			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
 
-			lom.addContent(metametadata);
-			
+			try {
+				lom.addContent(metametadata);
+			} catch (IndexOutOfBoundsException ex) {
+				System.out.println("Fuck");
+			}
+
 			// if (lifecycle != null) {
 			// try {
 			// lom.addContent(4, metametadata);
