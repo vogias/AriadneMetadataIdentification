@@ -130,23 +130,25 @@ public class HarvesterUtils extends Identification {
 			Element lom = JDomUtils.getXpathNode("//lom:lom",
 					OaiUtils.LOMLOMNS, record.getMetadata());
 
-			Element lifecycle = JDomUtils.getXpathNode(
-					"//lom:lom/lom:lifeCycle", OaiUtils.LOMLOMNS,
-					record.getMetadata());
+			// Element lifecycle = JDomUtils.getXpathNode(
+			// "//lom:lom/lom:lifeCycle", OaiUtils.LOMLOMNS,
+			// record.getMetadata());
 
 			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
 
-			if (lifecycle != null) {
-				try {
-					lom.addContent(4, metametadata);
-				} catch (IndexOutOfBoundsException ex) {
-					lom.addContent(2, metametadata);
-				}
-
-			} else {
-				lom.addContent(2, metametadata);
-
-			}
+			lom.addContent(metametadata);
+			
+			// if (lifecycle != null) {
+			// try {
+			// lom.addContent(4, metametadata);
+			// } catch (IndexOutOfBoundsException ex) {
+			// lom.addContent(2, metametadata);
+			// }
+			//
+			// } else {
+			// lom.addContent(2, metametadata);
+			//
+			// }
 
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
 			metametadata.addContent(0, newIdentifier);
