@@ -19,8 +19,6 @@
 
 package org.ariadne.oai.utils;
 
-import java.util.List;
-
 import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
@@ -106,6 +104,7 @@ public class HarvesterUtils extends Identification {
 
 				// }
 			} else {
+				
 				mmIdentifier = new Element("identifier", OaiUtils.LOMNS);
 				metametadata.addContent(0, mmIdentifier);
 

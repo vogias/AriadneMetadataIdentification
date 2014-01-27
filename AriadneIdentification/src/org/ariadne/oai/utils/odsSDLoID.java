@@ -14,16 +14,17 @@ import org.jdom.Namespace;
  */
 public class odsSDLoID extends Identification {
 
-	String gLOID, gLOMID;
+	String gLOID, gLOMID, lomID;
 	String xmlString;
 
-	private static Namespace odsSD = Namespace
-			.getNamespace("ods","http://www.opendiscoveryspace.eu/socialdata/v1/ods");
+	private static Namespace odsSD = Namespace.getNamespace("ods",
+			"http://www.opendiscoveryspace.eu/socialdata/v1/ods");
 
 	public odsSDLoID() {
 		xmlString = "";
 
 		gLOID = "";
+		lomID = "";
 
 	}
 
@@ -32,7 +33,9 @@ public class odsSDLoID extends Identification {
 			String reposIdentifier, String catalog, String oaiID)
 			throws IllegalStateException, JDOMException {
 		// TODO Auto-generated method stub
-		return null;
+
+		lomID = catalog + "_" + reposIdentifier + "_" + oaiID;
+		return record;
 	}
 
 	@Override
@@ -48,8 +51,8 @@ public class odsSDLoID extends Identification {
 		// Element sdLOIdentifier = (Element) XPath.selectSingleNode(
 		// record.getMetadata(), "//tag");
 
-		Element sdLOIdentifier = JDomUtils.getXpathNode("ods:loIdentifier", odsSD,
-				record.getMetadata());
+		Element sdLOIdentifier = JDomUtils.getXpathNode("ods:loIdentifier",
+				odsSD, record.getMetadata());
 
 		if (sdLOIdentifier != null) {
 			loIdent = sdLOIdentifier.getText();
@@ -79,7 +82,8 @@ public class odsSDLoID extends Identification {
 	@Override
 	public String getGlobalLOMIdentifier() {
 		// TODO Auto-generated method stub
-		return null;
+
+		return lomID;
 	}
 
 }
