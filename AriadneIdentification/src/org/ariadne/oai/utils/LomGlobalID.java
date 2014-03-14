@@ -15,6 +15,7 @@ import org.ariadne.util.OaiUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,50 +123,60 @@ public class LomGlobalID {
 
 			}
 
-			Document document = (Document) builder.build(xmlFile);
-			Element rootNode = document.getRootElement();
-			Record record = new Record();
+			try {
+				Document document = (Document) builder.build(xmlFile);
+				Element rootNode = document.getRootElement();
+				Record record = new Record();
 
-			record.setMetadata(rootNode);
+				record.setMetadata(rootNode);
 
-			String xmlString = JDomUtils.parseXml2string(record.getMetadata()
-					.getDocument(), null);
+				String xmlString = JDomUtils.parseXml2string(record
+						.getMetadata().getDocument(), null);
 
-			if (enviroment.addGlobalLOIdentifier()) {
-				record = id
-						.addGlobalLOIdentifier(record, parentFolder, catalog);
+				if (enviroment.addGlobalLOIdentifier()) {
+					record = id.addGlobalLOIdentifier(record, parentFolder,
+							catalog);
 
-				xmlString = JDomUtils.parseXml2string(record.getMetadata()
-						.getDocument(), null);
+					xmlString = JDomUtils.parseXml2string(record.getMetadata()
+							.getDocument(), null);
+
+				}
+
+				File nFile;
+				String oaiID = xmlFile.getName();
+				oaiID = oaiID.replace(".xml", "");
+
+				if (enviroment.addGlobalMetadataIdentifier()) {
+					record = id.addGlobalMetadataIdentifier(record,
+							parentFolder, catalog, oaiID);
+					xmlString = JDomUtils.parseXml2string(record.getMetadata()
+							.getDocument(), null);
+					String globalLOMIdentifier = id.getGlobalLOMIdentifier();
+					// System.out.println("MID:" + globalLOMIdentifier);
+					globalLOMIdentifier = globalLOMIdentifier.replace("/", ".");
+					globalLOMIdentifier = globalLOMIdentifier.replace(":", ".");
+					nFile = new File(parentDest, globalLOMIdentifier + ".xml");
+
+				} else
+					nFile = new File(parentDest, xmlFile.getName());
+
+				if (!id.getGlobalLOIdentifier().equals("")) {
+					OaiUtils.writeStringToFileInEncodingUTF8(xmlString,
+							nFile.getPath());
+					cnt++;
+				} else
+					System.out.println(xmlFile.getPath()
+							+ " does not contain LO ID");
+
+			} catch (JDOMParseException ex) {
+				String message = ex.getMessage();
+				if (message.contains("Premature end of file")) {
+					System.err.println("Bad XML File");
+					continue;
+				}
+				continue;
 
 			}
-
-			File nFile;
-			String oaiID = xmlFile.getName();
-			oaiID = oaiID.replace(".xml", "");
-
-			if (enviroment.addGlobalMetadataIdentifier()) {
-				record = id.addGlobalMetadataIdentifier(record, parentFolder,
-						catalog, oaiID);
-				xmlString = JDomUtils.parseXml2string(record.getMetadata()
-						.getDocument(), null);
-				String globalLOMIdentifier = id.getGlobalLOMIdentifier();
-				// System.out.println("MID:" + globalLOMIdentifier);
-				globalLOMIdentifier = globalLOMIdentifier.replace("/", ".");
-				globalLOMIdentifier = globalLOMIdentifier.replace(":", ".");
-				nFile = new File(parentDest, globalLOMIdentifier + ".xml");
-
-			} else
-				nFile = new File(parentDest, xmlFile.getName());
-			
-
-			if (!id.getGlobalLOIdentifier().equals("")) {
-				OaiUtils.writeStringToFileInEncodingUTF8(xmlString,
-						nFile.getPath());
-				cnt++;
-			} else
-				System.out.println(xmlFile.getPath()
-						+ " does not contain LO ID");
 
 		}
 		logstring.append(" " + cnt);
@@ -174,5 +185,6 @@ public class LomGlobalID {
 
 		// System.out.println("========================================");
 		// System.out.println("Done");
+
 	}
 }
