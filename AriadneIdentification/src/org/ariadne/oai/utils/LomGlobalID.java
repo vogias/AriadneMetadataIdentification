@@ -155,6 +155,7 @@ public class LomGlobalID {
 					// System.out.println("MID:" + globalLOMIdentifier);
 					globalLOMIdentifier = globalLOMIdentifier.replace("/", ".");
 					globalLOMIdentifier = globalLOMIdentifier.replace(":", ".");
+					globalLOMIdentifier = globalLOMIdentifier.replace("?", ".");
 					nFile = new File(parentDest, globalLOMIdentifier + ".xml");
 
 				} else

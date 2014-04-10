@@ -80,22 +80,41 @@ public class HarvesterUtils extends Identification {
 						mmIdentifier.getNamespace());
 
 				if (loIdent != null) {
-					ident = ident.concat(loIdent);
 
-					Element newIdentifier = new Element("identifier",
-							OaiUtils.LOMNS);
-					metametadata.addContent(0, newIdentifier);
+					if (!loIdent.equals("")) {
+						ident = ident.concat(loIdent);
 
-					Element catalog = new Element("catalog", OaiUtils.LOMNS);
-					catalog.setText(ctlg);
-					newIdentifier.addContent(catalog);
+						Element newIdentifier = new Element("identifier",
+								OaiUtils.LOMNS);
+						metametadata.addContent(0, newIdentifier);
 
-					Element entry = new Element("entry", OaiUtils.LOMNS);
-					// ident = ident.replace("/", ".");
-					// ident = ident.replace(":", ".");
-					entry.setText(ident);
-					newIdentifier.addContent(entry);
-					gLOMID = ident;
+						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						catalog.setText(ctlg);
+						newIdentifier.addContent(catalog);
+
+						Element entry = new Element("entry", OaiUtils.LOMNS);
+						// ident = ident.replace("/", ".");
+						// ident = ident.replace(":", ".");
+						entry.setText(ident);
+						newIdentifier.addContent(entry);
+						gLOMID = ident;
+					} else {
+						mmIdentifier = new Element("identifier", OaiUtils.LOMNS);
+						metametadata.addContent(0, mmIdentifier);
+
+						ident += "_" + oaiID;
+
+						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						catalog.setText(ctlg);
+						mmIdentifier.addContent(catalog);
+
+						Element entry = new Element("entry", OaiUtils.LOMNS);
+						// ident = ident.replace("/", ".");
+						// ident = ident.replace(":", ".");
+						entry.setText(ident);
+						mmIdentifier.addContent(entry);
+						gLOMID = ident;
+					}
 				} else {
 
 					System.err.println("Missing LO Identifier");
@@ -104,7 +123,7 @@ public class HarvesterUtils extends Identification {
 
 				// }
 			} else {
-				
+
 				mmIdentifier = new Element("identifier", OaiUtils.LOMNS);
 				metametadata.addContent(0, mmIdentifier);
 
@@ -196,22 +215,58 @@ public class HarvesterUtils extends Identification {
 
 				if (loIdent != null) {
 
-					ident = ident.concat(loIdent);
+					if (!loIdent.equals("")) {
 
-					Element newIdentifier = new Element("identifier",
-							OaiUtils.LOMNS);
-					general.addContent(0, newIdentifier);
+						ident = ident.concat(loIdent);
 
-					Element catalog = new Element("catalog", OaiUtils.LOMNS);
-					catalog.setText(ctlg);
-					newIdentifier.addContent(catalog);
+						Element newIdentifier = new Element("identifier",
+								OaiUtils.LOMNS);
+						general.addContent(0, newIdentifier);
 
-					Element entry = new Element("entry", OaiUtils.LOMNS);
-					// ident = ident.replace("/", ".");
-					// ident = ident.replace(":", ".");
-					entry.setText(ident);
-					newIdentifier.addContent(entry);
-					gLOID = ident;
+						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						catalog.setText(ctlg);
+						newIdentifier.addContent(catalog);
+
+						Element entry = new Element("entry", OaiUtils.LOMNS);
+						// ident = ident.replace("/", ".");
+						// ident = ident.replace(":", ".");
+						entry.setText(ident);
+						newIdentifier.addContent(entry);
+						gLOID = ident;
+					} else {
+						Element technical = JDomUtils.getXpathNode(
+								"//lom:lom/lom:technical", OaiUtils.LOMLOMNS,
+								record.getMetadata());
+
+						if (technical != null) {
+							Element location = technical.getChild("location",
+									OaiUtils.LOMNS);
+
+							if (location != null) {
+								loIdent = location.getText();
+
+								ident = ident.concat(loIdent);
+
+								Element newIdentifier = new Element(
+										"identifier", OaiUtils.LOMNS);
+								general.addContent(0, newIdentifier);
+
+								Element catalog = new Element("catalog",
+										OaiUtils.LOMNS);
+								catalog.setText(ctlg);
+								newIdentifier.addContent(catalog);
+
+								Element entry = new Element("entry",
+										OaiUtils.LOMNS);
+								// ident = ident.replace("/", ".");
+								// ident = ident.replace(":", ".");
+								entry.setText(ident);
+								newIdentifier.addContent(entry);
+								gLOID = loIdent;
+
+							}
+						}
+					}
 				} else {
 
 					System.err.println("Missing LOM Identifier");
