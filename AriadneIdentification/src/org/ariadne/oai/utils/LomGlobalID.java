@@ -15,6 +15,7 @@ import org.ariadne.util.OaiUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.filter.ElementFilter;
 import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
@@ -124,14 +125,28 @@ public class LomGlobalID {
 			}
 
 			try {
+
 				Document document = (Document) builder.build(xmlFile);
+
 				Element rootNode = document.getRootElement();
+				rootNode.setNamespace(null);
+
+				Iterator<Element> descendants = rootNode
+						.getDescendants(new ElementFilter());
+
+				while (descendants.hasNext()) {
+					Element next = descendants.next();
+					if (next.getNamespace() != null)
+						next.setNamespace(null);
+				}
+
 				Record record = new Record();
 
 				record.setMetadata(rootNode);
 
 				String xmlString = JDomUtils.parseXml2string(record
 						.getMetadata().getDocument(), null);
+				
 
 				if (enviroment.addGlobalLOIdentifier()) {
 					record = id.addGlobalLOIdentifier(record, parentFolder,

@@ -14,6 +14,7 @@ import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 
 import constants.Constants;
@@ -41,11 +42,11 @@ public class HashID extends Identification {
 
 			mmIdOaiCatalog = XPath
 					.newInstance("//lom:lom/lom:metaMetadata/lom:identifier/lom:catalog/text()=\"oai\"");
-			mmIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
+			mmIdOaiCatalog.addNamespace(Namespace.NO_NAMESPACE);
 
 			gIdOaiCatalog = XPath
 					.newInstance("//lom:lom/lom:general/lom:identifier/lom:catalog/text()=\"oai\"");
-			gIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
+			gIdOaiCatalog.addNamespace(Namespace.NO_NAMESPACE);
 		} catch (JDOMException e) {
 			// NOOP
 			e.printStackTrace();
@@ -63,12 +64,12 @@ public class HashID extends Identification {
 
 		// try {
 		Element general = JDomUtils.getXpathNode("//lom:lom/lom:general",
-				OaiUtils.LOMLOMNS, record.getMetadata());
+				Namespace.NO_NAMESPACE, record.getMetadata());
 
 		// /lom:lom/lom:general
 		if (general != null) {
 			Element generalIdentifier = general.getChild("identifier",
-					OaiUtils.LOMNS);
+					Namespace.NO_NAMESPACE);
 
 			if (generalIdentifier != null) {
 				if (!(Boolean) gIdOaiCatalog.selectSingleNode(record
@@ -80,14 +81,14 @@ public class HashID extends Identification {
 						ident = ident.concat(loIdent);
 
 						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
+								Namespace.NO_NAMESPACE);
 						general.addContent(0, newIdentifier);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						Element catalog = new Element("catalog", Namespace.NO_NAMESPACE);
 						catalog.setText(ctlg);
 						newIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
+						Element entry = new Element("entry", Namespace.NO_NAMESPACE);
 						ident = ident.replace("/", ".");
 						ident = ident.replace(":", ".");
 						entry.setText(ident);
@@ -102,12 +103,12 @@ public class HashID extends Identification {
 				}
 			} else {
 				Element technical = JDomUtils.getXpathNode(
-						"//lom:lom/lom:technical", OaiUtils.LOMLOMNS,
+						"//lom:lom/lom:technical", Namespace.NO_NAMESPACE,
 						record.getMetadata());
 
 				if (technical != null) {
 					Element location = technical.getChild("location",
-							OaiUtils.LOMNS);
+							Namespace.NO_NAMESPACE);
 
 					if (location != null) {
 						loIdent = location.getText();
@@ -115,14 +116,14 @@ public class HashID extends Identification {
 						ident = ident.concat(loIdent);
 
 						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
+								Namespace.NO_NAMESPACE);
 						general.addContent(0, newIdentifier);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						Element catalog = new Element("catalog", Namespace.NO_NAMESPACE);
 						catalog.setText(ctlg);
 						newIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
+						Element entry = new Element("entry", Namespace.NO_NAMESPACE);
 						ident = ident.replace("/", ".");
 						ident = ident.replace(":", ".");
 						entry.setText(ident);
@@ -193,7 +194,7 @@ public class HashID extends Identification {
 		String ident = ctlg + "_" + reposIdentifier + "_";
 
 		Element metametadata = JDomUtils.getXpathNode(
-				"//lom:lom/lom:metaMetadata", OaiUtils.LOMLOMNS,
+				"//lom:lom/lom:metaMetadata", Namespace.NO_NAMESPACE,
 				record.getMetadata());
 
 		if (metametadata != null) {
@@ -204,14 +205,14 @@ public class HashID extends Identification {
 
 			ident = ident.concat(createHash(xmlString));
 
-			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
+			Element newIdentifier = new Element("identifier", Namespace.NO_NAMESPACE);
 			metametadata.addContent(0, newIdentifier);
 
-			Element catalog = new Element("catalog", OaiUtils.LOMNS);
+			Element catalog = new Element("catalog",Namespace.NO_NAMESPACE);
 			catalog.setText(ctlg);
 			newIdentifier.addContent(catalog);
 
-			Element entry = new Element("entry", OaiUtils.LOMNS);
+			Element entry = new Element("entry", Namespace.NO_NAMESPACE);
 			ident = ident.replace("/", ".");
 			ident = ident.replace(":", ".");
 			entry.setText(ident);
@@ -226,18 +227,18 @@ public class HashID extends Identification {
 			ident = ident.concat(createHash(xmlString));
 
 			Element lom = JDomUtils.getXpathNode("//lom:lom",
-					OaiUtils.LOMLOMNS, record.getMetadata());
-			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
+					Namespace.NO_NAMESPACE, record.getMetadata());
+			metametadata = new Element("metaMetadata", Namespace.NO_NAMESPACE);
 			lom.addContent(2, metametadata);
 
-			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
+			Element newIdentifier = new Element("identifier", Namespace.NO_NAMESPACE);
 			metametadata.addContent(0, newIdentifier);
 
-			Element catalog = new Element("catalog", OaiUtils.LOMNS);
+			Element catalog = new Element("catalog", Namespace.NO_NAMESPACE);
 			catalog.setText(ctlg);
 			newIdentifier.addContent(catalog);
 
-			Element entry = new Element("entry", OaiUtils.LOMNS);
+			Element entry = new Element("entry", Namespace.NO_NAMESPACE);
 			ident = ident.replace("/", ".");
 			ident = ident.replace(":", ".");
 			entry.setText(ident);

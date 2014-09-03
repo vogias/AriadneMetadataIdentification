@@ -23,6 +23,7 @@ import org.ariadne.util.JDomUtils;
 import org.ariadne.util.OaiUtils;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 
 public class HarvesterUtils extends Identification {
@@ -37,12 +38,12 @@ public class HarvesterUtils extends Identification {
 		try {
 			xmlString = "";
 			mmIdOaiCatalog = XPath
-					.newInstance("//lom:lom/lom:metaMetadata/lom:identifier/lom:catalog/text()=\"oai\"");
-			mmIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
+					.newInstance("//lom/metaMetadata/identifier/catalog/text()=\"oai\"");
+			mmIdOaiCatalog.addNamespace(Namespace.NO_NAMESPACE);
 
 			gIdOaiCatalog = XPath
-					.newInstance("//lom:lom/lom:general/lom:identifier/lom:catalog/text()=\"oai\"");
-			gIdOaiCatalog.addNamespace(OaiUtils.LOMLOMNS);
+					.newInstance("//lom/general/identifier/catalog/text()=\"oai\"");
+			gIdOaiCatalog.addNamespace(Namespace.NO_NAMESPACE);
 			gLOID = "";
 			gLOMID = "";
 		} catch (JDOMException e) {
@@ -60,13 +61,12 @@ public class HarvesterUtils extends Identification {
 
 		// try {
 
-		Element metametadata = JDomUtils.getXpathNode(
-				"//lom:lom/lom:metaMetadata", OaiUtils.LOMLOMNS,
-				record.getMetadata());
+		Element metametadata = JDomUtils.getXpathNode("//lom/metaMetadata",
+				Namespace.NO_NAMESPACE, record.getMetadata());
 
 		if (metametadata != null) {
 			Element mmIdentifier = metametadata.getChild("identifier",
-					OaiUtils.LOMNS);
+					Namespace.NO_NAMESPACE);
 			// List children = metametadata.getChildren("identifier",
 			// OaiUtils.LOMLOMNS);
 
@@ -85,30 +85,30 @@ public class HarvesterUtils extends Identification {
 						ident = ident.concat(loIdent);
 
 						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
+								Namespace.NO_NAMESPACE);
 						metametadata.addContent(0, newIdentifier);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						Element catalog = new Element("catalog", Namespace.NO_NAMESPACE);
 						catalog.setText(ctlg);
 						newIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
+						Element entry = new Element("entry", Namespace.NO_NAMESPACE);
 						// ident = ident.replace("/", ".");
 						// ident = ident.replace(":", ".");
 						entry.setText(ident);
 						newIdentifier.addContent(entry);
 						gLOMID = ident;
 					} else {
-						mmIdentifier = new Element("identifier", OaiUtils.LOMNS);
+						mmIdentifier = new Element("identifier",Namespace.NO_NAMESPACE);
 						metametadata.addContent(0, mmIdentifier);
 
 						ident += "_" + oaiID;
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						Element catalog = new Element("catalog",Namespace.NO_NAMESPACE);
 						catalog.setText(ctlg);
 						mmIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
+						Element entry = new Element("entry", Namespace.NO_NAMESPACE);
 						// ident = ident.replace("/", ".");
 						// ident = ident.replace(":", ".");
 						entry.setText(ident);
@@ -117,23 +117,23 @@ public class HarvesterUtils extends Identification {
 					}
 				} else {
 
-					System.err.println("Missing LO Identifier");
+					System.err.println("Missing LOM Identifier");
 
 				}
 
 				// }
 			} else {
 
-				mmIdentifier = new Element("identifier", OaiUtils.LOMNS);
+				mmIdentifier = new Element("identifier", Namespace.NO_NAMESPACE);
 				metametadata.addContent(0, mmIdentifier);
 
 				ident += "_" + oaiID;
 
-				Element catalog = new Element("catalog", OaiUtils.LOMNS);
+				Element catalog = new Element("catalog", Namespace.NO_NAMESPACE);
 				catalog.setText(ctlg);
 				mmIdentifier.addContent(catalog);
 
-				Element entry = new Element("entry", OaiUtils.LOMNS);
+				Element entry = new Element("entry", Namespace.NO_NAMESPACE);
 				// ident = ident.replace("/", ".");
 				// ident = ident.replace(":", ".");
 				entry.setText(ident);
@@ -145,18 +145,22 @@ public class HarvesterUtils extends Identification {
 
 			ident += "_" + oaiID;
 
-			Element lom = JDomUtils.getXpathNode("//lom:lom",
-					OaiUtils.LOMLOMNS, record.getMetadata());
+			Element lom = JDomUtils.getXpathNode("//lom", Namespace.NO_NAMESPACE,
+					record.getMetadata());
 
 			// Element lifecycle = JDomUtils.getXpathNode(
-			// "//lom:lom/lom:lifeCycle", OaiUtils.LOMLOMNS,
+			// "//lom/lifeCycle", OaiUtils.LOMLOMNS,
 			// record.getMetadata());
 
-			metametadata = new Element("metaMetadata", OaiUtils.LOMNS);
+			metametadata = new Element("metaMetadata", Namespace.NO_NAMESPACE);
 
 			try {
 				lom.addContent(metametadata);
 			} catch (IndexOutOfBoundsException ex) {
+				System.out.println("Fuck");
+			} catch (NullPointerException e) {
+
+				// TODO: handle exception
 				System.out.println("Fuck");
 			}
 
@@ -172,14 +176,14 @@ public class HarvesterUtils extends Identification {
 			//
 			// }
 
-			Element newIdentifier = new Element("identifier", OaiUtils.LOMNS);
+			Element newIdentifier = new Element("identifier", Namespace.NO_NAMESPACE);
 			metametadata.addContent(0, newIdentifier);
 
-			Element catalog = new Element("catalog", OaiUtils.LOMNS);
+			Element catalog = new Element("catalog", Namespace.NO_NAMESPACE);
 			catalog.setText(ctlg);
 			newIdentifier.addContent(catalog);
 
-			Element entry = new Element("entry", OaiUtils.LOMNS);
+			Element entry = new Element("entry",Namespace.NO_NAMESPACE);
 			// ident = ident.replace("/", ".");
 			// ident = ident.replace(":", ".");
 			entry.setText(ident);
@@ -198,13 +202,13 @@ public class HarvesterUtils extends Identification {
 		String loIdent = "";
 
 		// try {
-		Element general = JDomUtils.getXpathNode("//lom:lom/lom:general",
-				OaiUtils.LOMLOMNS, record.getMetadata());
+		Element general = JDomUtils.getXpathNode("//lom/general",
+				Namespace.NO_NAMESPACE, record.getMetadata());
 
-		// /lom:lom/lom:general
+		// /lom/general
 		if (general != null) {
 			Element generalIdentifier = general.getChild("identifier",
-					OaiUtils.LOMNS);
+					Namespace.NO_NAMESPACE);
 
 			if (generalIdentifier != null) {
 
@@ -220,14 +224,14 @@ public class HarvesterUtils extends Identification {
 						ident = ident.concat(loIdent);
 
 						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
+								Namespace.NO_NAMESPACE);
 						general.addContent(0, newIdentifier);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						Element catalog = new Element("catalog", Namespace.NO_NAMESPACE);
 						catalog.setText(ctlg);
 						newIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
+						Element entry = new Element("entry", Namespace.NO_NAMESPACE);
 						// ident = ident.replace("/", ".");
 						// ident = ident.replace(":", ".");
 						entry.setText(ident);
@@ -235,12 +239,12 @@ public class HarvesterUtils extends Identification {
 						gLOID = ident;
 					} else {
 						Element technical = JDomUtils.getXpathNode(
-								"//lom:lom/lom:technical", OaiUtils.LOMLOMNS,
+								"//lom/technical", Namespace.NO_NAMESPACE,
 								record.getMetadata());
 
 						if (technical != null) {
 							Element location = technical.getChild("location",
-									OaiUtils.LOMNS);
+									Namespace.NO_NAMESPACE);
 
 							if (location != null) {
 								loIdent = location.getText();
@@ -248,16 +252,16 @@ public class HarvesterUtils extends Identification {
 								ident = ident.concat(loIdent);
 
 								Element newIdentifier = new Element(
-										"identifier", OaiUtils.LOMNS);
+										"identifier", Namespace.NO_NAMESPACE);
 								general.addContent(0, newIdentifier);
 
 								Element catalog = new Element("catalog",
-										OaiUtils.LOMNS);
+										Namespace.NO_NAMESPACE);
 								catalog.setText(ctlg);
 								newIdentifier.addContent(catalog);
 
 								Element entry = new Element("entry",
-										OaiUtils.LOMNS);
+										Namespace.NO_NAMESPACE);
 								// ident = ident.replace("/", ".");
 								// ident = ident.replace(":", ".");
 								entry.setText(ident);
@@ -269,18 +273,17 @@ public class HarvesterUtils extends Identification {
 					}
 				} else {
 
-					System.err.println("Missing LOM Identifier");
+					System.err.println("Missing LO Identifier");
 				}
 
 				// }
 			} else {
-				Element technical = JDomUtils.getXpathNode(
-						"//lom:lom/lom:technical", OaiUtils.LOMLOMNS,
-						record.getMetadata());
+				Element technical = JDomUtils.getXpathNode("//lom/technical",
+						Namespace.NO_NAMESPACE, record.getMetadata());
 
 				if (technical != null) {
 					Element location = technical.getChild("location",
-							OaiUtils.LOMNS);
+							Namespace.NO_NAMESPACE);
 
 					if (location != null) {
 						loIdent = location.getText();
@@ -288,14 +291,14 @@ public class HarvesterUtils extends Identification {
 						ident = ident.concat(loIdent);
 
 						Element newIdentifier = new Element("identifier",
-								OaiUtils.LOMNS);
+								Namespace.NO_NAMESPACE);
 						general.addContent(0, newIdentifier);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMNS);
+						Element catalog = new Element("catalog", Namespace.NO_NAMESPACE);
 						catalog.setText(ctlg);
 						newIdentifier.addContent(catalog);
 
-						Element entry = new Element("entry", OaiUtils.LOMNS);
+						Element entry = new Element("entry",Namespace.NO_NAMESPACE);
 						// ident = ident.replace("/", ".");
 						// ident = ident.replace(":", ".");
 						entry.setText(ident);
