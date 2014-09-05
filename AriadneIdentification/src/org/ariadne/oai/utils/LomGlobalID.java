@@ -15,6 +15,7 @@ import org.ariadne.util.OaiUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
@@ -129,15 +130,18 @@ public class LomGlobalID {
 				Document document = (Document) builder.build(xmlFile);
 
 				Element rootNode = document.getRootElement();
-				rootNode.setNamespace(null);
+
+				// if (rootNode.getNamespace() != null)
+				rootNode.setNamespace(OaiUtils.LOMLOMNS);
 
 				Iterator<Element> descendants = rootNode
 						.getDescendants(new ElementFilter());
 
 				while (descendants.hasNext()) {
 					Element next = descendants.next();
-					if (next.getNamespace() != null)
-						next.setNamespace(null);
+				//	if (next.getNamespace() != null)
+						next.setNamespace(OaiUtils.LOMLOMNS);
+
 				}
 
 				Record record = new Record();
@@ -147,6 +151,7 @@ public class LomGlobalID {
 				String xmlString = JDomUtils.parseXml2string(record
 						.getMetadata().getDocument(), null);
 				
+			//	System.out.println(xmlString);
 
 				if (enviroment.addGlobalLOIdentifier()) {
 					record = id.addGlobalLOIdentifier(record, parentFolder,
