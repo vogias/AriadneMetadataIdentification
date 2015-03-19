@@ -139,8 +139,8 @@ public class LomGlobalID {
 
 				while (descendants.hasNext()) {
 					Element next = descendants.next();
-				//	if (next.getNamespace() != null)
-						next.setNamespace(OaiUtils.LOMLOMNS);
+					// if (next.getNamespace() != null)
+					next.setNamespace(OaiUtils.LOMLOMNS);
 
 				}
 
@@ -150,8 +150,8 @@ public class LomGlobalID {
 
 				String xmlString = JDomUtils.parseXml2string(record
 						.getMetadata().getDocument(), null);
-				
-			//	System.out.println(xmlString);
+
+				// System.out.println(xmlString);
 
 				if (enviroment.addGlobalLOIdentifier()) {
 					record = id.addGlobalLOIdentifier(record, parentFolder,
@@ -171,12 +171,17 @@ public class LomGlobalID {
 							parentFolder, catalog, oaiID);
 					xmlString = JDomUtils.parseXml2string(record.getMetadata()
 							.getDocument(), null);
-					String globalLOMIdentifier = id.getGlobalLOMIdentifier();
-					// System.out.println("MID:" + globalLOMIdentifier);
-					globalLOMIdentifier = globalLOMIdentifier.replace("/", ".");
-					globalLOMIdentifier = globalLOMIdentifier.replace(":", ".");
-					globalLOMIdentifier = globalLOMIdentifier.replace("?", ".");
-					nFile = new File(parentDest, globalLOMIdentifier + ".xml");
+					// String globalLOMIdentifier = id.getGlobalLOMIdentifier();
+					// // System.out.println("MID:" + globalLOMIdentifier);
+					// globalLOMIdentifier = globalLOMIdentifier.replace("/",
+					// ".");
+					// globalLOMIdentifier = globalLOMIdentifier.replace(":",
+					// ".");
+					// globalLOMIdentifier = globalLOMIdentifier.replace("?",
+					// ".");
+					// nFile = new File(parentDest, globalLOMIdentifier +
+					// ".xml");
+					nFile = new File(parentDest, xmlFile.getName());
 
 				} else
 					nFile = new File(parentDest, xmlFile.getName());
