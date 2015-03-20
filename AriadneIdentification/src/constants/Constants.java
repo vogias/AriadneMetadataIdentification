@@ -24,6 +24,8 @@ public class Constants {
 	public static String idCreatorClass = "identification.class";
 	public static String catalog = "identification.catalog.value";
 	public static String hMethod = "identification.hash.method";
-	
 
+	public static String queueHost = "message.queue.server";
+	public static String queueUser = "message.queue.username";
+	public static String queuePass = "message.queue.password";
 }

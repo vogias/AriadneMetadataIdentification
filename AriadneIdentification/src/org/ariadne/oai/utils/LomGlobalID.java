@@ -15,12 +15,15 @@ import org.ariadne.util.OaiUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 
 import constants.Constants;
 import enviroment.Enviroment;
@@ -33,6 +36,7 @@ public class LomGlobalID {
 
 	private static final Logger slf4jLogger = LoggerFactory
 			.getLogger(LomGlobalID.class);
+	private final static String QUEUE_NAME = "identification";
 
 	/**
 	 * @param args
@@ -47,10 +51,6 @@ public class LomGlobalID {
 			IllegalAccessException {
 		// TODO Auto-generated method stub
 		if (args.length != 2) {
-			// System.err.println("Usage : ");
-			// System.err
-			// .println("java -jar LomGlobalID.jar <input folder path> <output folder path>");
-			// System.exit(-1);
 
 			System.err
 					.println("Usage : java -jar LomGlobalID.jar <input folder path> <output folder path>");
@@ -70,18 +70,17 @@ public class LomGlobalID {
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
 		Class myClass = myClassLoader.loadClass(idClass);
 
-		// HarvesterUtils utils = new HarvesterUtils();
-
-		// System.out.println("========================================");
-		// System.out.println("Number of records to Identify:" + xmls.size());
-		// System.out.println("========================================");
-
 		String catalog = props.getProperty(Constants.catalog);
 		System.out.println("Number of records:" + xmls.size());
 
 		boolean flag = false;
 
 		int cnt = 0;
+		ConnectionFactory factory = new ConnectionFactory();
+		factory.setHost(props.getProperty(Constants.queueHost));
+		factory.setUsername(props.getProperty(Constants.queueUser));
+		factory.setPassword(props.getProperty(Constants.queuePass));
+
 		while (iterator.hasNext()) {
 			Object whatInstance = myClass.newInstance();
 			Identification id = (Identification) whatInstance;
@@ -209,8 +208,14 @@ public class LomGlobalID {
 
 		slf4jLogger.info(logstring.toString());
 
-		// System.out.println("========================================");
-		// System.out.println("Done");
+		Connection connection = factory.newConnection();
+		Channel channel = connection.createChannel();
+		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+
+		channel.basicPublish("", QUEUE_NAME, null, logstring.toString()
+				.getBytes());
+		channel.close();
+		connection.close();
 
 	}
 }
