@@ -5,6 +5,7 @@ package org.ariadne.oai.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -34,8 +35,7 @@ import enviroment.Enviroment;
  */
 public class LomGlobalID {
 
-	private static final Logger slf4jLogger = LoggerFactory
-			.getLogger(LomGlobalID.class);
+	private static final Logger slf4jLogger = LoggerFactory.getLogger(LomGlobalID.class);
 	private final static String QUEUE_NAME = "identification";
 
 	/**
@@ -46,14 +46,12 @@ public class LomGlobalID {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	public static void main(String[] args) throws JDOMException, IOException,
-			ClassNotFoundException, InstantiationException,
-			IllegalAccessException {
+	public static void main(String[] args)
+			throws JDOMException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		// TODO Auto-generated method stub
 		if (args.length != 2) {
 
-			System.err
-					.println("Usage : java -jar LomGlobalID.jar <input folder path> <output folder path>");
+			System.err.println("Usage : java -jar LomGlobalID.jar <input folder path> <output folder path>");
 			System.exit(-1);
 		}
 
@@ -113,7 +111,8 @@ public class LomGlobalID {
 
 				if (enviroment.addGlobalMetadataIdentifier()) {
 					// System.out
-					// .println("Creating global LOM identifiers for repository:"
+					// .println("Creating global LOM identifiers for
+					// repository:"
 					// + parentFolder);
 					System.out.println("Creating global LOM identifiers");
 					logstring.append(" " + "TRUE");
@@ -133,8 +132,7 @@ public class LomGlobalID {
 				// if (rootNode.getNamespace() != null)
 				rootNode.setNamespace(OaiUtils.LOMLOMNS);
 
-				Iterator<Element> descendants = rootNode
-						.getDescendants(new ElementFilter());
+				Iterator<Element> descendants = rootNode.getDescendants(new ElementFilter());
 
 				while (descendants.hasNext()) {
 					Element next = descendants.next();
@@ -147,17 +145,14 @@ public class LomGlobalID {
 
 				record.setMetadata(rootNode);
 
-				String xmlString = JDomUtils.parseXml2string(record
-						.getMetadata().getDocument(), null);
+				String xmlString = JDomUtils.parseXml2string(record.getMetadata().getDocument(), null);
 
 				// System.out.println(xmlString);
 
 				if (enviroment.addGlobalLOIdentifier()) {
-					record = id.addGlobalLOIdentifier(record, parentFolder,
-							catalog);
+					record = id.addGlobalLOIdentifier(record, parentFolder, catalog);
 
-					xmlString = JDomUtils.parseXml2string(record.getMetadata()
-							.getDocument(), null);
+					xmlString = JDomUtils.parseXml2string(record.getMetadata().getDocument(), null);
 
 				}
 
@@ -166,10 +161,8 @@ public class LomGlobalID {
 				oaiID = oaiID.replace(".xml", "");
 
 				if (enviroment.addGlobalMetadataIdentifier()) {
-					record = id.addGlobalMetadataIdentifier(record,
-							parentFolder, catalog, oaiID);
-					xmlString = JDomUtils.parseXml2string(record.getMetadata()
-							.getDocument(), null);
+					record = id.addGlobalMetadataIdentifier(record, parentFolder, catalog, oaiID);
+					xmlString = JDomUtils.parseXml2string(record.getMetadata().getDocument(), null);
 					// String globalLOMIdentifier = id.getGlobalLOMIdentifier();
 					// // System.out.println("MID:" + globalLOMIdentifier);
 					// globalLOMIdentifier = globalLOMIdentifier.replace("/",
@@ -186,12 +179,10 @@ public class LomGlobalID {
 					nFile = new File(parentDest, xmlFile.getName());
 
 				if (!id.getGlobalLOIdentifier().equals("")) {
-					OaiUtils.writeStringToFileInEncodingUTF8(xmlString,
-							nFile.getPath());
+					OaiUtils.writeStringToFileInEncodingUTF8(xmlString, nFile.getPath());
 					cnt++;
 				} else
-					System.out.println(xmlFile.getPath()
-							+ " does not contain LO ID");
+					System.out.println(xmlFile.getPath() + " does not contain LO ID");
 
 			} catch (JDOMParseException ex) {
 				String message = ex.getMessage();
@@ -202,20 +193,23 @@ public class LomGlobalID {
 				continue;
 
 			}
-
+			
 		}
 		logstring.append(" " + cnt);
 
 		slf4jLogger.info(logstring.toString());
 
-		Connection connection = factory.newConnection();
-		Channel channel = connection.createChannel();
-		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		try {
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
-		channel.basicPublish("", QUEUE_NAME, null, logstring.toString()
-				.getBytes());
-		channel.close();
-		connection.close();
+			channel.basicPublish("", QUEUE_NAME, null, logstring.toString().getBytes());
+			channel.close();
+			connection.close();
+		} catch (ConnectException ex) {
+			ex.printStackTrace();
+		}
 
 	}
 }
