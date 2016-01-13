@@ -36,7 +36,8 @@ import enviroment.Enviroment;
 public class LomGlobalID {
 
 	private static final Logger slf4jLogger = LoggerFactory.getLogger(LomGlobalID.class);
-	private final static String QUEUE_NAME = "identification";
+	private static String QUEUE_NAME = "identification";
+	public static Properties props;
 
 	/**
 	 * @param args
@@ -62,7 +63,7 @@ public class LomGlobalID {
 
 		SAXBuilder builder = new SAXBuilder();
 
-		Properties props = enviroment.getArguments().getProps();
+		props = enviroment.getArguments().getProps();
 
 		String idClass = props.getProperty(Constants.idCreatorClass);
 		ClassLoader myClassLoader = ClassLoader.getSystemClassLoader();
@@ -79,9 +80,12 @@ public class LomGlobalID {
 		factory.setUsername(props.getProperty(Constants.queueUser));
 		factory.setPassword(props.getProperty(Constants.queuePass));
 
+		
+		Object whatInstance = myClass.newInstance();
+		Identification id = (Identification) whatInstance;
+		
 		while (iterator.hasNext()) {
-			Object whatInstance = myClass.newInstance();
-			Identification id = (Identification) whatInstance;
+			
 
 			// System.out.println(iterator.next().getName());
 			File xmlFile = iterator.next();
@@ -193,7 +197,7 @@ public class LomGlobalID {
 				continue;
 
 			}
-			
+
 		}
 		logstring.append(" " + cnt);
 
