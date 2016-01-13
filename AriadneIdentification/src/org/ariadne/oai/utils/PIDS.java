@@ -177,6 +177,9 @@ public class PIDS extends Identification {
 			pid.createPIDManual(props.getProperty(Constants.pidapiURL),
 					"[{\"type\":\"URL\",\"parsed_data\":\"" + teclocation.getText() + "\"}]", ident);
 
+			
+			teclocation.setText(props.getProperty(Constants.pidResolverURL) + ident);
+			
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMLOMNS);
 			general.addContent(0, newIdentifier);
 
@@ -192,7 +195,7 @@ public class PIDS extends Identification {
 
 			gLOID = loIdent;
 
-			// }
+			
 
 		} else
 			System.err.println("Missing LO Location or general section element");
