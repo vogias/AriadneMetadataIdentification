@@ -29,7 +29,8 @@ public class Constants {
 	public static String queueUser = "message.queue.username";
 	public static String queuePass = "message.queue.password";
 	
-	public static String pidBaseURL = "identification.pid.baseURL";
+	public static String pidapiURL = "identification.pid.apiURL";
+	public static String pidResolverURL = "identification.pid.resolverURL";
 	public static String pidUsername = "identification.pid.username";
 	public static String pidPassword = "identification.pid.password";
 }

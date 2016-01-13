@@ -7,7 +7,6 @@ import org.ariadne.util.OaiUtils;
 import org.grnet.pids.Handle;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
 
 import constants.Constants;
 
@@ -22,6 +21,7 @@ public class PIDS extends Identification {
 	public PIDS() {
 
 		props = LomGlobalID.props;
+		pid = setupHandleConnection();
 		xmlString = "";
 
 		gLOID = "";
@@ -163,101 +163,42 @@ public class PIDS extends Identification {
 
 		Element teclocation = JDomUtils.getXpathNode("//lom:lom/lom:technical/lom:location", OaiUtils.LOMLOMNS,
 				record.getMetadata());
-		
-		System.out.println(teclocation.getText());
 
 		if (general != null && teclocation != null) {
-			Element generalIdentifier = general.getChild("identifier", OaiUtils.LOMLOMNS);
 
-			if (generalIdentifier != null) {
+			loIdent = teclocation.getText();
+			loIdent = loIdent.replace("/", ".");
+			loIdent = String.valueOf(loIdent.replace(":", ".").hashCode());
 
-				loIdent = generalIdentifier.getChildText("entry", generalIdentifier.getNamespace());
+			ident = ident.concat(loIdent);
 
-				if (loIdent != null) {
+			//pid.deletePID(props.getProperty(Constants.pidapiURL), ident);
 
-					if (!loIdent.equals("")) {
+			pid.createPIDManual(props.getProperty(Constants.pidapiURL),
+					"[{\"type\":\"URL\",\"parsed_data\":\"" + teclocation.getText() + "\"}]", ident);
 
-						ident = ident.concat(loIdent);
+			Element newIdentifier = new Element("identifier", OaiUtils.LOMLOMNS);
+			general.addContent(0, newIdentifier);
 
-						Element newIdentifier = new Element("identifier", OaiUtils.LOMLOMNS);
-						general.addContent(0, newIdentifier);
+			Element catalog = new Element("catalog", OaiUtils.LOMLOMNS);
+			catalog.setText(ctlg);
+			newIdentifier.addContent(catalog);
 
-						Element catalog = new Element("catalog", OaiUtils.LOMLOMNS);
-						catalog.setText(ctlg);
-						newIdentifier.addContent(catalog);
+			Element entry = new Element("entry", OaiUtils.LOMLOMNS);
 
-						Element entry = new Element("entry", OaiUtils.LOMLOMNS);
+			ident = props.getProperty(Constants.pidResolverURL) + ident;
+			entry.setText(ident);
+			newIdentifier.addContent(entry);
 
-						entry.setText(ident);
-						newIdentifier.addContent(entry);
-						gLOID = ident;
-					} else {
-						Element technical = JDomUtils.getXpathNode("//lom:lom/lom:technical", OaiUtils.LOMLOMNS,
-								record.getMetadata());
+			gLOID = loIdent;
 
-						if (technical != null) {
-							Element location = technical.getChild("location", OaiUtils.LOMLOMNS);
+			// }
 
-							if (location != null) {
-								loIdent = location.getText();
-
-								ident = ident.concat(loIdent);
-
-								Element newIdentifier = new Element("identifier", OaiUtils.LOMLOMNS);
-								general.addContent(0, newIdentifier);
-
-								Element catalog = new Element("catalog", OaiUtils.LOMLOMNS);
-								catalog.setText(ctlg);
-								newIdentifier.addContent(catalog);
-
-								Element entry = new Element("entry", OaiUtils.LOMLOMNS);
-
-								entry.setText(ident);
-								newIdentifier.addContent(entry);
-								gLOID = loIdent;
-
-							}
-						}
-					}
-				} else {
-
-					System.err.println("Missing LO Identifier");
-				}
-
-				// }
-			} else {
-				Element technical = JDomUtils.getXpathNode("//lom:lom/lom:technical", OaiUtils.LOMLOMNS,
-						record.getMetadata());
-
-				if (technical != null) {
-					Element location = technical.getChild("location", OaiUtils.LOMLOMNS);
-
-					if (location != null) {
-						loIdent = location.getText();
-						loIdent = loIdent.replace("/", ".");
-						loIdent = loIdent.replace(":", ".");
-
-						ident = ident.concat(loIdent);
-
-						Element newIdentifier = new Element("identifier", OaiUtils.LOMLOMNS);
-						general.addContent(0, newIdentifier);
-
-						Element catalog = new Element("catalog", OaiUtils.LOMLOMNS);
-						catalog.setText(ctlg);
-						newIdentifier.addContent(catalog);
-
-						Element entry = new Element("entry", OaiUtils.LOMLOMNS);
-
-						entry.setText(ident);
-						newIdentifier.addContent(entry);
-						gLOID = loIdent;
-
-					}
-				}
-			}
-		}
+		} else
+			System.err.println("Missing LO Location or general section element");
 
 		return record;
+
 	}
 
 	@Override
