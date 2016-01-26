@@ -184,6 +184,7 @@ public class PIDS extends Identification {
 		String loIdent = "";
 
 		Element general = JDomUtils.getXpathNode("//lom:lom/lom:general", OaiUtils.LOMLOMNS, record.getMetadata());
+		
 
 		Element teclocation = JDomUtils.getXpathNode("//lom:lom/lom:technical/lom:location", OaiUtils.LOMLOMNS,
 				record.getMetadata());
