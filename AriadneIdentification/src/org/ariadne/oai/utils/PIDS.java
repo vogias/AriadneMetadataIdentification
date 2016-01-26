@@ -1,5 +1,9 @@
 package org.ariadne.oai.utils;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.ariadne.util.JDomUtils;
@@ -14,6 +18,7 @@ public class PIDS extends Identification {
 
 	private static Handle pid;
 	private static Properties props;
+	private static File pidFile;
 
 	String gLOID, gLOMID;
 	String xmlString;
@@ -152,6 +157,25 @@ public class PIDS extends Identification {
 
 	}
 
+	private void appendPID2File(String pid, String fileName) {
+
+		try {
+
+			if (pidFile == null)
+				pidFile = new File(fileName+".pidlist");
+
+			BufferedWriter pidFileWriter = new BufferedWriter(new FileWriter(pidFile, true));
+			pidFileWriter.append(pid);
+			pidFileWriter.newLine();
+			pidFileWriter.close();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	public Record addGlobalLOIdentifier(Record record, String reposIdentifier, String ctlg)
 			throws IllegalStateException, JDOMException {
 
@@ -164,6 +188,7 @@ public class PIDS extends Identification {
 		Element teclocation = JDomUtils.getXpathNode("//lom:lom/lom:technical/lom:location", OaiUtils.LOMLOMNS,
 				record.getMetadata());
 
+		
 		if (general != null && teclocation != null) {
 
 			loIdent = teclocation.getText();
@@ -172,19 +197,21 @@ public class PIDS extends Identification {
 
 			ident = ident.concat(loIdent);
 
-			//pid.deletePID(props.getProperty(Constants.pidapiURL), ident);
+			// pid.deletePID(props.getProperty(Constants.pidapiURL), ident);
 
 			pid.createPIDManual(props.getProperty(Constants.pidapiURL),
 					"[{\"type\":\"URL\",\"parsed_data\":\"" + teclocation.getText() + "\"}]", ident);
 
-			
-			teclocation.setText(props.getProperty(Constants.pidResolverURL) + ident);
-			
+			appendPID2File(ident, reposIdentifier);
+
+			// teclocation.setText(props.getProperty(Constants.pidResolverURL) +
+			// ident);
+
 			Element newIdentifier = new Element("identifier", OaiUtils.LOMLOMNS);
 			general.addContent(0, newIdentifier);
 
 			Element catalog = new Element("catalog", OaiUtils.LOMLOMNS);
-			catalog.setText(ctlg);
+			catalog.setText(ctlg+"-PID");
 			newIdentifier.addContent(catalog);
 
 			Element entry = new Element("entry", OaiUtils.LOMLOMNS);
@@ -194,8 +221,6 @@ public class PIDS extends Identification {
 			newIdentifier.addContent(entry);
 
 			gLOID = loIdent;
-
-			
 
 		} else
 			System.err.println("Missing LO Location or general section element");
