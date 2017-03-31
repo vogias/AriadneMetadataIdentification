@@ -22,10 +22,6 @@ import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-
 import constants.Constants;
 import enviroment.Enviroment;
 
@@ -75,17 +71,11 @@ public class LomGlobalID {
 		boolean flag = false;
 
 		int cnt = 0;
-		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(props.getProperty(Constants.queueHost));
-		factory.setUsername(props.getProperty(Constants.queueUser));
-		factory.setPassword(props.getProperty(Constants.queuePass));
 
-		
 		Object whatInstance = myClass.newInstance();
 		Identification id = (Identification) whatInstance;
-		
+
 		while (iterator.hasNext()) {
-			
 
 			// System.out.println(iterator.next().getName());
 			File xmlFile = iterator.next();
@@ -202,18 +192,6 @@ public class LomGlobalID {
 		logstring.append(" " + cnt);
 
 		slf4jLogger.info(logstring.toString());
-
-		try {
-			Connection connection = factory.newConnection();
-			Channel channel = connection.createChannel();
-			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-
-			channel.basicPublish("", QUEUE_NAME, null, logstring.toString().getBytes());
-			channel.close();
-			connection.close();
-		} catch (ConnectException ex) {
-			ex.printStackTrace();
-		}
 
 	}
 }
